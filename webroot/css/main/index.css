@@ -1,0 +1,36 @@
+body{
+    margin:0;
+    padding:0;
+    font-family: "Roboto", "Arial", sans-serif;
+}
+
+.ng-enter.ng-enter-active {
+    opacity: 1;
+}
+
+.ng-enter {
+    opacity: 0;
+    transition-duration: 150ms;
+    transition-property: opacity;
+    transition-timing-function: linear;
+}
+
+#ApplicationColumn {
+    position:fixed;
+    width: 33%;
+    height: 100vh;
+}
+
+#CategoryColumn {
+    position:absolute;
+    left: 33%;
+    width: 34%;
+    min-height: 100vh;
+}
+
+#DetailColumn {
+    position:fixed;
+    width: 33%;
+    height: 100vh;
+    right: 0;
+}
