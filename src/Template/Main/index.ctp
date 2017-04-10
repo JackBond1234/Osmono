@@ -1,10 +1,12 @@
 <?
-    echo $this->Html->css("main/index.css");
+    echo $this->Html->css("main/index", ["block" => "css"]);
 
-    echo $this->Html->script("jquery.js");
-    echo $this->Html->script("angular.js");
-    echo $this->Html->script("angular-animate.js");
-    echo $this->Html->script("AngularApps.js");
+    echo $this->Html->script([
+        "jquery",
+        "angular",
+        "angular-animate",
+        "AngularApps"
+    ], ["block" => "script"]);
 
 
     $ApplicationUrl = $this->Url->build(['controller' => 'Application', 'action' => 'index']);
