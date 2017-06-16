@@ -1,0 +1,36 @@
+#categories-container {
+    background-color: #000033;
+    min-height: 100vh;
+}
+
+#categories-container #menu-bar{
+    color: #FFFFFF;
+    padding:4px;
+}
+
+#categories-container #menu-bar .left {
+    float:left;
+}
+
+#categories-container #menu-bar .middle {
+    clear:both;
+    width: 100%;
+    text-align:center;
+}
+
+#categories-container #menu-bar .right {
+    float:right;
+}
+
+#categories-container #body-container {
+    background-color: #FFFFFF;
+    color: #000000;
+    position: absolute;
+    padding: 10px;
+    left: 4px;
+    right: 4px;
+    bottom: 4px;
+    top: 40px;
+    border-radius: 2px;
+    overflow-y: scroll;
+}

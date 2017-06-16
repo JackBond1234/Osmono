@@ -2,6 +2,7 @@
 /config/app.php
 /tmp/*
 /logs/*
+.idea
 
 .htaccess
 /webroot/.htaccess

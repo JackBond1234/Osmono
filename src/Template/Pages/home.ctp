@@ -2,6 +2,8 @@
 
 echo $this->Html->css("home", ["block" => "css"]);
 
+$this->assign("title", "Osmono.com is under construction");
+
 ?>
 
 <head>

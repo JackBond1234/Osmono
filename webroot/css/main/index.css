@@ -4,33 +4,75 @@ body{
     font-family: "Roboto", "Arial", sans-serif;
 }
 
-.ng-enter.ng-enter-active {
+.module.ng-enter.ng-enter-active {
     opacity: 1;
 }
 
-.ng-enter {
+.module.ng-enter {
     opacity: 0;
     transition-duration: 150ms;
     transition-property: opacity;
     transition-timing-function: linear;
 }
 
-#ApplicationColumn {
-    position:fixed;
-    width: 33%;
-    height: 100vh;
+.Loading {
+    text-align:center;
+    margin-top:40px;
 }
 
-#CategoryColumn {
-    position:absolute;
-    left: 33%;
-    width: 34%;
-    min-height: 100vh;
+.navBarButton.depressed {
+    outline: solid 2px rgba(255, 0, 0, 1);
 }
 
-#DetailColumn {
-    position:fixed;
-    width: 33%;
-    height: 100vh;
-    right: 0;
+@media(min-width:600px) {
+    #ApplicationColumn {
+        position: fixed;
+        width: 33%;
+        height: 100vh;
+    }
+
+    #CategoryColumn {
+        position: absolute;
+        left: 33%;
+        width: 34%;
+        min-height: 100vh;
+    }
+
+    #DetailColumn {
+        position: fixed;
+        width: 33%;
+        height: 100vh;
+        right: 0;
+    }
+}
+
+@media(max-width:599px) {
+    #ApplicationColumn {
+        position: fixed;
+        width: 100vw;
+        height: 100vh;
+        left: -100vw;
+        z-index:2;
+        transition: left 225ms cubic-bezier(0.4, 0.0, 0.2, 1);
+    }
+
+    #ApplicationColumn.slideInOutHorizontally{
+        left: 0;
+    }
+
+    #CategoryColumn {
+        position: absolute;
+        left: 0;
+        width: 100vw;
+        min-height: 100vh;
+        z-index:0;
+    }
+
+    #DetailColumn {
+        position: fixed;
+        width: 100vw;
+        height: 100vh;
+        right: 100vw;
+        z-index: 1;
+    }
 }

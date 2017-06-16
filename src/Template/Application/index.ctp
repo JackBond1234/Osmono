@@ -1,14 +1,24 @@
 <?php
-sleep(2);
-    echo $this->Html->script("Application/Controller.js");
+use Cake\Core\Configure;
+
+if (Configure::read('debug')) {
+    sleep(rand(1, 4));
+}
+    echo $this->Html->css("application/index", ["block" => "css"]);
+
+    echo $this->Html->script("Application/Controller", ["block" => "script"]);
 ?>
 
-<div ng-controller="applicationController" style="background-color:#FF0000; min-height: 100vh">
-    <div>
-        Menu bar
+<div ng-controller="applicationController" id="application-container">
+    <div id="menu-bar">
+        <? // Implement a mobile interface switcher. Fix the CSS on this menu bar ?>
+        <div class="middle">Title</div>
+                                                                                            <!--Let's not use this toggle variable-->
+        <div class="left"><?= $this->Html->image("hamburger.svg", ["class"=>"navBarButton", "ng-class"=>"{'depressed':toggle}", "ng-click"=>"toggle=!toggle"]); ?></div>
+        <div class="right"><?= $this->Html->image("x.svg", ["class"=>"navBarButton", "ng-click"=>"hideMobileApplication()"]); ?>
+            <?= $this->Html->image("expandLeftColumn.svg", ["class"=>"navBarButton", "ng-click"=>"hideMobileApplication()"]); ?></div>
     </div>
-    <div style="background-color:#FFFFFF; position:absolute; padding: 10px; left: 4px; right: 4px; bottom: 4px; top: 44px; border-radius:4px; overflow-y:scroll">
-
+    <div id="body-container">
         <div ng-repeat="i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]">
             Application View <br>
             This is the application view<br>
