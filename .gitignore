@@ -3,6 +3,7 @@
 /tmp/*
 /logs/*
 .idea
+*DS_Store
 
 .htaccess
 /webroot/.htaccess

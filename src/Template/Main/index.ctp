@@ -18,13 +18,13 @@
 ?>
 
 <div ng-app="index" ng-controller="mainController">
-    <div id="ApplicationColumn" class="MainColumn" ng-class="{'slideInOutHorizontally':showApplicationColumn}">
-        <?= $this->element("module", ["UrlBuilderArray" => $ApplicationUrl]); ?>
+    <div id="DetailColumn" class="MainColumn">
+        <?= $this->element("module", ["UrlBuilderArray" => $DetailsUrl]); ?>
     </div>
     <div id="CategoryColumn" class="MainColumn">
         <?= $this->element("module", ["UrlBuilderArray" => $CategoriesUrl]); ?>
     </div>
-    <div id="DetailColumn" class="MainColumn">
-        <?= $this->element("module", ["UrlBuilderArray" => $DetailsUrl]); ?>
+    <div id="ApplicationColumn" class="MainColumn" ng-class="{'slideInOutHorizontally':showApplicationColumn, 'expandToFullScreen':expandApplicationColumn}">
+        <?= $this->element("module", ["UrlBuilderArray" => $ApplicationUrl]); ?>
     </div>
 </div>

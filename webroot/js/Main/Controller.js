@@ -12,4 +12,8 @@ angular.module('index').controller('mainController', function($scope, $rootScope
     $scope.$on("showMobileApplication", function(event, data){
         $scope.showApplicationColumn = data["showing"];
     });
+
+    $scope.$on("expandDesktopApplication", function(event, data){
+        $scope.expandApplicationColumn = data["expanded"];
+    });
 });
