@@ -2,6 +2,7 @@ angular.module('index').controller('applicationController', function($scope, $ro
     //Init
     $scope.applicationDropDownExpanded = false;
     $scope.applicationColumnExpanded = false;
+    $scope.applicationViewToShow = 'data';
 
     //Listeners
     $scope.$on("expandDesktopApplication", function(event, data){
@@ -10,6 +11,10 @@ angular.module('index').controller('applicationController', function($scope, $ro
 
     $scope.$on("expandApplicationDropDown", function(event, data){
         $scope.applicationDropDownExpanded = data["expanded"];
+    });
+
+    $scope.$on("setApplicationView", function(event, data){
+        $scope.applicationViewToShow = data["viewId"];
     });
 
     //Emitters
@@ -25,7 +30,15 @@ angular.module('index').controller('applicationController', function($scope, $ro
         $rootScope.$broadcast("expandDesktopApplication", {expanded: false});
     };
 
-    $scope.expandApplicationDropDown = function() {
+    $scope.toggleApplicationDropDown = function() {
         $rootScope.$broadcast("expandApplicationDropDown", {expanded: !$scope.applicationDropDownExpanded});
+    };
+
+    $scope.retractApplicationDropDown = function() {
+        $rootScope.$broadcast("expandApplicationDropDown", {expanded: false});
+    };
+
+    $scope.setApplicationView = function(viewId) {
+        $rootScope.$broadcast("setApplicationView", {viewId: viewId});
     }
 });
