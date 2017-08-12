@@ -76,8 +76,8 @@ Router::scope('/', function (RouteBuilder $routes) {
 });
 
 Router::prefix('application', function ($routes) {
-    // All routes here will be prefixed with `/admin`
-    // And have the prefix => admin route element added.
+    // All routes here will be prefixed with `/application`
+    // And have the prefix => application route element added.
     $routes->fallbacks(DashedRoute::class);
 });
 

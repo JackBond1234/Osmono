@@ -1,12 +1,13 @@
 <?
-    $this->Html->meta('viewport', 'width=device-width, initial-scale=1.0, maximum-scale=1.0', ['block' => true]);
+    $this->Html->meta('viewport', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0', ['block' => true]);
 
     echo $this->Html->css("main/index", ["block" => "css"]);
 
     echo $this->Html->script([
         "jquery",
-        "angular",
-        "angular-animate",
+        "angular.min",
+        "angular-route.min",
+        "angular-animate.min",
         "AngularApps",
         "Main/Controller"
     ], ["block" => "script"]);

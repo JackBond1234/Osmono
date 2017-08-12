@@ -1,4 +1,4 @@
-var index = angular.module('index', ['ngAnimate']);
+var index = angular.module('index', ['ngAnimate', 'ngRoute']);
 
 //Make a dedicated file for some/all of the stuff below
 index.config(function ($controllerProvider, $animateProvider) {

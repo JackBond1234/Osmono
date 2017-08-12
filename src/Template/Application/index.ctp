@@ -51,7 +51,7 @@ if (Configure::read('debug')) {
     </div>
     <div id="body-container">
         <div id="body-content">
-            <div ng-if='applicationViewToShow == "data"' id="data-view">
+            <div ng-if='applicationViewToShow == "data"' class='application-view' id="data-view">
                 <?= $this->element(
                     "module",
                     [
@@ -64,7 +64,7 @@ if (Configure::read('debug')) {
                     ]
                 ); ?>
             </div>
-            <div ng-if='applicationViewToShow == "distribute"' id="distribute-view">
+            <div ng-if='applicationViewToShow == "distribute"' class='application-view' id="distribute-view">
                 <?= $this->element(
                     "module",
                     [
@@ -77,7 +77,7 @@ if (Configure::read('debug')) {
                     ]
                 ); ?>
             </div>
-            <div ng-if='applicationViewToShow == "user-info"' id="user-info-view">
+            <div ng-if='applicationViewToShow == "user-info"' class='application-view' id="user-info-view">
                 <?= $this->element(
                     "module",
                     [
@@ -93,9 +93,9 @@ if (Configure::read('debug')) {
         </div>
         <div class="nav-bar-dropdown" ng-class="{'expanded':applicationDropDownExpanded}">
             <ul>
-                <li ng-click="setApplicationView('data')">Data</li>
-                <li ng-click="setApplicationView('distribute')">Distribute</li>
-                <li ng-click="setApplicationView('user-info')">User Info</li>
+                <li ng-click="setApplicationView('data')"><?= $this->Html->image("data.svg"); ?><div>Data</div></li>
+                <li ng-click="setApplicationView('distribute')"><?= $this->Html->image("distribute.svg"); ?><div>Distribute</div></li>
+                <li ng-click="setApplicationView('user-info')"><?= $this->Html->image("userInfo.svg"); ?><div>User Info</div></li>
             </ul>
         </div>
     </div>
