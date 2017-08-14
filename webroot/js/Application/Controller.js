@@ -15,6 +15,11 @@ angular.module('index').controller('applicationController', function($scope, $ro
     $scope.applicationDropDownExpanded = false;
     $scope.applicationColumnExpanded = false;
     $scope.applicationViewToShow = 'data';
+    $scope.applicationDisplayNameMap = {
+        data: "Data",
+        distribute: "Distribute",
+        "user-info": "User Info"
+    };
 
     //Listeners
     $scope.$on("expandDesktopApplication", function(event, data){
@@ -25,44 +30,62 @@ angular.module('index').controller('applicationController', function($scope, $ro
         $scope.applicationDropDownExpanded = data["expanded"];
     });
 
-    var desiredViewToSwitchTo;
+    // var desiredViewToSwitchTo;
     var unsubscribeFromApplicationLoadListener;
     $scope.$on("setApplicationView", function(event, data){
-        desiredViewToSwitchTo = data["viewId"];
+        // desiredViewToSwitchTo = data["viewId"];
         if (typeof unsubscribeFromApplicationLoadListener !== "function") {
-            setApplicationView();
+            signalNewApplicationViewToLoad(data["viewId"]);
         }
     });
 
-    function setApplicationView() {
+    function signalNewApplicationViewToLoad(desiredViewToSwitchTo) {
         if ($scope.applicationViewToShow !== desiredViewToSwitchTo) {
             //Gets any fully loaded application view. Due to ngIf, only one or none should ever be present.
-            var applicationViewModelElement = angular.element(document).find('.application-view').find(".module");
+            var applicationViewModuleElement = angular.element(document).find('.application-view').find(".module");
             //If one is present
-            if (applicationViewModelElement.length > 0) {
-                applicationViewModelElement.each(function () {
-                    //Unload the currently shown views
-                    var url = $(this).data("url");
-                    $rootScope.$broadcast("unloadModule", {url: url});
-                });
-                //Switch the view to the new target
-                $scope.applicationViewToShow = desiredViewToSwitchTo;
-                //Kill the content load listener and reset the unsub function so that the next navigate will call the current function
-                if (typeof unsubscribeFromApplicationLoadListener === "function") {
-                    unsubscribeFromApplicationLoadListener();
-                    unsubscribeFromApplicationLoadListener = undefined;
-                }
+            if (applicationViewModuleElement.length > 0) {
+                removeExistingViews(applicationViewModuleElement);
+                beginLoadingViewNow(desiredViewToSwitchTo);
+                signalNoQueuedViewLoadsRemaining();
             } else {
-                //Kill the content load listener if it exists, because we're about to reactivate it.
-                if (typeof unsubscribeFromApplicationLoadListener === "function") {
-                    unsubscribeFromApplicationLoadListener();
-                }
-                //(Re)activate content load listener so that queued events can fire when previous load is complete.
-                unsubscribeFromApplicationLoadListener = $rootScope.$on("$includeContentLoaded", function (event, templateName) {
-                    setApplicationView();
-                });
+                queueViewToLoadAfterCurrentViewLoadFinishes(desiredViewToSwitchTo);
             }
         }
+    }
+
+    function removeExistingViews(viewElements){
+        viewElements.each(function () {
+            //Unload the currently shown views
+            var url = $(this).data("url");
+            $rootScope.$broadcast("unloadModule", {url: url});
+        });
+    }
+
+    function beginLoadingViewNow(desiredViewToSwitchTo) {
+        //Switch the view to the new target
+        $scope.applicationViewToShow = desiredViewToSwitchTo;
+    }
+
+    function signalNoQueuedViewLoadsRemaining(){
+        //Kill the content load listener and reset the unsub function so that the next navigate will call the current function
+        //i.e. Since there's nothing left in the queue, we don't want to try to load anything 
+        if (typeof unsubscribeFromApplicationLoadListener === "function") {
+            unsubscribeFromApplicationLoadListener();
+            unsubscribeFromApplicationLoadListener = undefined;
+        }
+    }
+
+    function queueViewToLoadAfterCurrentViewLoadFinishes(desiredViewToSwitchTo) {
+        //Kill the content load listener if it exists, because we're about to reactivate it.
+        if (typeof unsubscribeFromApplicationLoadListener === "function") {
+            unsubscribeFromApplicationLoadListener();
+        }
+
+        //(Re)activate content load listener so that queued events can fire when previous load is complete.
+        unsubscribeFromApplicationLoadListener = $rootScope.$on("$includeContentLoaded", function () {
+            signalNewApplicationViewToLoad(desiredViewToSwitchTo);
+        });
     }
 
     //Emitters

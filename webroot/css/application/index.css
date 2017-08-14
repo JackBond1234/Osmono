@@ -15,7 +15,9 @@
 
 #application-container #menu-bar .middle {
     clear:both;
-    width: 100%;
+    /*width: 100%;*/
+    left:0;
+    right:0;
     text-align:center;
     position:absolute;
     font-size: x-large;

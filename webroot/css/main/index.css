@@ -16,6 +16,9 @@ body{
 }
 
 .Loading {
+    position:absolute;
+    left:0;
+    right:0;
     text-align:center;
     margin-top:40px;
 }

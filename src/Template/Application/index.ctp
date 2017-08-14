@@ -11,10 +11,10 @@ if (Configure::read('debug')) {
 
 <div ng-controller="applicationController" id="application-container">
     <div id="menu-bar">
-        <div class="middle">Title</div>
+        <div class="middle" ng-bind="applicationDisplayNameMap[applicationViewToShow]"></div>
         <div class="left">
             <?= $this->Html->image(
-                    "hamburger.svg",
+                    "hamburger_white.svg",
                     [
                         "class"=>"navBarButton",
                         "ng-class"=>"{'depressed':applicationDropDownExpanded}",
@@ -93,9 +93,9 @@ if (Configure::read('debug')) {
         </div>
         <div class="nav-bar-dropdown" ng-class="{'expanded':applicationDropDownExpanded}">
             <ul>
-                <li ng-click="setApplicationView('data')"><?= $this->Html->image("data.svg"); ?><div>Data</div></li>
-                <li ng-click="setApplicationView('distribute')"><?= $this->Html->image("distribute.svg"); ?><div>Distribute</div></li>
-                <li ng-click="setApplicationView('user-info')"><?= $this->Html->image("userInfo.svg"); ?><div>User Info</div></li>
+                <li ng-click="setApplicationView('data')"><?= $this->Html->image("data.svg"); ?><div ng-bind="applicationDisplayNameMap['data']"></div></li>
+                <li ng-click="setApplicationView('distribute')"><?= $this->Html->image("distribute.svg"); ?><div ng-bind="applicationDisplayNameMap['distribute']"></div></li>
+                <li ng-click="setApplicationView('user-info')"><?= $this->Html->image("userInfo.svg"); ?><div ng-bind="applicationDisplayNameMap['user-info']"></div></li>
             </ul>
         </div>
     </div>
