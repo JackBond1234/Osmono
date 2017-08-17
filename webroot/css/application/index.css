@@ -1,5 +1,5 @@
 #application-container {
-    background-color: #000033;
+    background-color: var(--primary-color, #000033);
     min-height: 100vh;
 }
 
@@ -15,7 +15,6 @@
 
 #application-container #menu-bar .middle {
     clear:both;
-    /*width: 100%;*/
     left:0;
     right:0;
     text-align:center;
@@ -36,6 +35,11 @@
     left: 0;
     top: 0;
     bottom: 0;
+}
+
+#application-container .nav-bar-dropdown{
+    background-color: var(--primary-color, #000033);
+    color: #FFFFFF;
 }
 
 #application-container .nav-bar-dropdown ul li {
@@ -104,12 +108,7 @@
 
     #ApplicationColumn.expandToFullScreen .nav-bar-dropdown {
         border-radius: 0 0 10px 0;
-        /*transition: transform 195ms cubic-bezier(0.4, 0.0, 0.6, 1), border-radius 200ms cubic-bezier(0.4, 0.0, 0.2, 1);*/
     }
-
-    /*#ApplicationColumn.expandToFullScreen .nav-bar-dropdown.expanded {*/
-        /*transition: transform 225ms cubic-bezier(0.0, 0.0, 0.2, 1), border-radius 200ms cubic-bezier(0.4, 0.0, 0.2, 1);*/
-    /*}*/
 
     #application-container .nav-bar-dropdown ul li:active:after {
         padding: 0;

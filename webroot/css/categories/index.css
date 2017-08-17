@@ -1,5 +1,5 @@
 #categories-container {
-    background-color: #FFFFFF;
+    background-color: var(--secondary-color, #888888);
     min-height: 100vh;
 }
 
@@ -43,37 +43,6 @@
     bottom: 0;
 }
 
-#categories-container .nav-bar-dropdown ul li {
-    cursor: pointer;
-    display:block;
-    position:relative;
-}
-
-#categories-container .nav-bar-dropdown ul li:after {
-    content: "";
-    background-color: #FFFFFF;
-    display: block;
-    position: absolute;
-    padding:0;
-    margin:0;
-    left:0;
-    right:0;
-    top:0;
-    bottom:0;
-    opacity: 0;
-    transition: opacity 200ms
-}
-
-#categories-container .nav-bar-dropdown ul li div {
-    display:inline-block;
-    margin-left: 10px;
-    vertical-align: middle;
-}
-
-#categories-container .nav-bar-dropdown ul li img {
-    vertical-align:middle;
-}
-
 .categories-view.ng-enter.ng-enter-active {
     opacity: 1;
 }
@@ -86,13 +55,17 @@
 }
 
 @media(min-width:600px) {
+    #categories-container #body-container #body-content {
+        box-shadow: inset 3px 0 3px -2px #888888;
+    }
+
     #categories-container #body-container {
         background-color: #FFFFFF;
         color: #000000;
         position: absolute;
-        left: 4px;
-        right: 4px;
-        bottom: 4px;
+        left: 0;
+        right: 0;
+        bottom: 0;
         top: 40px;
         border-radius: 2px;
         overflow: hidden;
@@ -109,12 +82,7 @@
 
     #CategoriesColumn.expandToFullScreen .nav-bar-dropdown {
         border-radius: 0 0 10px 0;
-        /*transition: transform 195ms cubic-bezier(0.4, 0.0, 0.6, 1), border-radius 200ms cubic-bezier(0.4, 0.0, 0.2, 1);*/
     }
-
-    /*#CategoriesColumn.expandToFullScreen .nav-bar-dropdown.expanded {*/
-    /*transition: transform 225ms cubic-bezier(0.0, 0.0, 0.2, 1), border-radius 200ms cubic-bezier(0.4, 0.0, 0.2, 1);*/
-    /*}*/
 
     #categories-container .nav-bar-dropdown ul li:active:after {
         padding: 0;
@@ -156,6 +124,134 @@
         right: 0;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#categories-container .categories-tag{
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none;   /* Chrome/Safari/Opera */
+    -khtml-user-select: none;    /* Konqueror */
+    -moz-user-select: none;      /* Firefox */
+    -ms-user-select: none;       /* Internet Explorer/Edge */
+    user-select: none;           /* Non-prefixed version, currently
+                                  not supported by any browser */
+    cursor: pointer;
+
+    /*font-size: 16px;*/
+
+    padding:10px;
+    position:relative;
+    background-color:#FFFFFF;
+    border:1px solid;
+    margin: 2px;
+    /*z-index:1;*/
+}
+
+#categories-container .categories-tag.ng-enter.ng-enter-active  {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+#categories-container .categories-tag.ng-enter {
+    opacity: 0;
+    transform: translateY(-100%);
+    transition: transform 200ms cubic-bezier(0.0, 0.0, 0.2, 1), opacity 200ms cubic-bezier(0.0, 0.0, 0.2, 1);
+}
+
+#categories-container .categories-tag.ng-leave {
+    opacity: 1;
+    transform: translateY(0);
+    transition: transform 200ms cubic-bezier(0.0, 0.0, 0.2, 1), opacity 200ms cubic-bezier(0.0, 0.0, 0.2, 1);
+}
+
+#categories-container .categories-tag.ng-leave.ng-leave-active {
+    opacity: 0;
+    transform: translateY(-100%);
+}
+
+#categories-container .categories-tag.ng-enter-stagger {
+    /* this will have a 100ms delay between each successive enter animation */
+    -webkit-transition-delay: 25ms;
+    transition-delay: 25ms;
+
+    /* in case the stagger doesn't work then these two values
+     must be set to 0 to avoid an accidental CSS inheritance */
+    -webkit-transition-duration: 0s;
+    transition-duration: 0s;
+}
+
+#categories-container .categories-tag.dndDragging{
+    box-shadow: 0 4px 4px #000000;
+    /*z-index:2;*/
+}
+
+#categories-container .categories-tag:first-of-type{
+    margin-top:0;
+}
+
+#categories-container .categories-tag.dndPlaceholder{
+    padding:10px;
+    padding-top:11px;
+    padding-bottom:11px;
+    position:relative;
+}
+
+#categories-container .category-grip{
+    display:inline-block;
+    margin-right:10px;
+    vertical-align:middle;
+    width:16px;
+    height:16px;
+}
+
+#categories-container .categories-tag .category-balance {
+    float:right;
+    display: inline-block;
+    /*font-size: 22px;*/
+}
+
+#categories-container .categories-lite-item .category-name .category-name-container{
+    width:0;
+}
+
+#categories-container .categories-tag .category-name{
+    text-overflow: ellipsis;
+    min-width: 0;
+    white-space: nowrap;
+    flex: 1;
+    display:inline-block;
+    overflow-x: hidden;
+}
+
+#categories-container .category-tag-data{
+    width:100%;
+    table-layout:fixed;
+}
+
+#categories-container .category-tag-data tr{
+    display: flex;
+    align-items:stretch;
+}
+
+#categories-container .category-grip-container{
+    display:inline;
+}
+
+
+
 
 
 

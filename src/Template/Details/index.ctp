@@ -10,23 +10,25 @@ if (Configure::read('debug')) {
 ?>
 
 <div ng-controller="detailsController" id="details-container">
-    <div id="menu-bar">
-        <? // Implement a mobile interface switcher. Fix the CSS on this menu bar ?>
-        <div class="left">Btn</div>
-        <div class="right">Btn</div>
-        <div class="middle">Title</div>
-    </div>
-    <div id="body-container">
-        <div ng-repeat="i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]">
-            Details View <br>
-            This is the details view<br>
-            This view will display one or more<br>
-            windows representing categories. <br>
-            Each window will contain a number <br>
-            of possible views that give information <br>
-            and provide commands and actions <br>
-            for the user to perform on <br>
-            the selected category.
+    <div class="detail-outer-dup-wrapper" ng-repeat="i in bop" ng-class="'dup'+i">
+        <div class="menu-bar">
+            <? // Implement a mobile interface switcher. Fix the CSS on this menu bar ?>
+            <div class="left">Btn</div>
+            <div class="right">Btn</div>
+            <div class="middle">Title{{i}}</div>
+        </div>
+        <div class="body-container">
+            <div ng-repeat="i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]">
+                Details View <br>
+                This is the details view<br>
+                This view will display one or more<br>
+                windows representing categories. <br>
+                Each window will contain a number <br>
+                of possible views that give information <br>
+                and provide commands and actions <br>
+                for the user to perform on <br>
+                the selected category.
+            </div>
         </div>
     </div>
 </div>

@@ -22,9 +22,9 @@ echo $this->Html->script("Categories/Controller", ["block" => "script"]);
         </div>
         <div class="left">
             <?= $this->Html->image(
-                "hamburger_black.svg",
+                "right_chevron.svg",
                 [
-                    "class"=>"navBarButton",
+                    "class"=>"navBarButton hideOnDesktop",
                     "ng-class"=>"{'depressed':applicationDropDownExpanded}",
                     "ng-click"=>"showApplication()"
                 ]
@@ -37,11 +37,15 @@ echo $this->Html->script("Categories/Controller", ["block" => "script"]);
     </div>
     <div id="body-container">
         <div id="body-content">
-            <table ng-repeat="i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]" style="width: 100%; border: solid 1px; margin-bottom: 10px;">
-                <tr style="height:40px; font-size: 17px;">
-                    <td style="background-color:red">X</td>
-                    <td>Category {{i}}</td>
-                    <td style="text-align:right">$100.00</td>
+            <div class="loading"><?= $this->Html->image('spinner.svg', ['ng-if' => '!categoriesLoaded']); ?></div>
+            <div class='categories-tag'
+                 ng-repeat="category in categories"
+                 ng-style="{'background' : '-webkit-linear-gradient(left, '+category.color+' 42px, white 42px)'}">
+            <table class="category-tag-data">
+                <tr>
+                    <td class="category-grip-container"><img ng-src="<?= $this->Url->build('/img/grip.svg'); ?>" class="category-grip"/></td>
+                    <td class="category-name"><div class="category-name-container" ng-bind="'&nbsp;'+category.name"></div></td>
+                    <td class="category-balance" ng-bind="category.balance|currency"></td>
                 </tr>
             </table>
         </div>

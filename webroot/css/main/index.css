@@ -1,7 +1,14 @@
+:root{
+    --primary-color: #253628;
+    --secondary-color: #C0CEB2;
+    --tertiary-color: #EBEBE9;
+}
+
 body{
     margin:0;
     padding:0;
     font-family: "Roboto", "Arial", sans-serif;
+    -webkit-text-size-adjust: 100%;
 }
 
 .module.ng-enter.ng-enter-active {
@@ -15,7 +22,7 @@ body{
     transition-timing-function: linear;
 }
 
-.Loading {
+.loading {
     position:absolute;
     left:0;
     right:0;
@@ -32,8 +39,6 @@ body{
 }
 
 .nav-bar-dropdown {
-    background-color: #000033;
-    color: #FFFFFF;
     position:absolute;
     width:100%;
     transform: translateY(-100%);

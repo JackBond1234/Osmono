@@ -30,7 +30,6 @@ angular.module('index').controller('applicationController', function($scope, $ro
         $scope.applicationDropDownExpanded = data["expanded"];
     });
 
-    // var desiredViewToSwitchTo;
     var unsubscribeFromApplicationLoadListener;
     $scope.$on("setApplicationView", function(event, data){
         // desiredViewToSwitchTo = data["viewId"];
@@ -39,6 +38,32 @@ angular.module('index').controller('applicationController', function($scope, $ro
         }
     });
 
+    //Emitters
+    $scope.hideMobileApplication = function(){
+        $rootScope.$broadcast("showMobileApplication", {showing: false});
+    };
+
+    $scope.expandDesktopApplication = function() {
+        $rootScope.$broadcast("expandDesktopApplication", {expanded: true});
+    };
+
+    $scope.retractDesktopApplication = function() {
+        $rootScope.$broadcast("expandDesktopApplication", {expanded: false});
+    };
+
+    $scope.toggleApplicationDropDown = function() {
+        $rootScope.$broadcast("expandApplicationDropDown", {expanded: !$scope.applicationDropDownExpanded});
+    };
+
+    $scope.retractApplicationDropDown = function() {
+        $rootScope.$broadcast("expandApplicationDropDown", {expanded: false});
+    };
+
+    $scope.setApplicationView = function(viewId) {
+        $rootScope.$broadcast("setApplicationView", {viewId: viewId});
+    };
+
+    //Helper functions
     function signalNewApplicationViewToLoad(desiredViewToSwitchTo) {
         if ($scope.applicationViewToShow !== desiredViewToSwitchTo) {
             //Gets any fully loaded application view. Due to ngIf, only one or none should ever be present.
@@ -69,7 +94,7 @@ angular.module('index').controller('applicationController', function($scope, $ro
 
     function signalNoQueuedViewLoadsRemaining(){
         //Kill the content load listener and reset the unsub function so that the next navigate will call the current function
-        //i.e. Since there's nothing left in the queue, we don't want to try to load anything 
+        //i.e. Since there's nothing left in the queue, we don't want to try to load anything
         if (typeof unsubscribeFromApplicationLoadListener === "function") {
             unsubscribeFromApplicationLoadListener();
             unsubscribeFromApplicationLoadListener = undefined;
@@ -86,30 +111,5 @@ angular.module('index').controller('applicationController', function($scope, $ro
         unsubscribeFromApplicationLoadListener = $rootScope.$on("$includeContentLoaded", function () {
             signalNewApplicationViewToLoad(desiredViewToSwitchTo);
         });
-    }
-
-    //Emitters
-    $scope.hideMobileApplication = function(){
-        $rootScope.$broadcast("showMobileApplication", {showing: false});
-    };
-
-    $scope.expandDesktopApplication = function() {
-        $rootScope.$broadcast("expandDesktopApplication", {expanded: true});
-    };
-
-    $scope.retractDesktopApplication = function() {
-        $rootScope.$broadcast("expandDesktopApplication", {expanded: false});
-    };
-
-    $scope.toggleApplicationDropDown = function() {
-        $rootScope.$broadcast("expandApplicationDropDown", {expanded: !$scope.applicationDropDownExpanded});
-    };
-
-    $scope.retractApplicationDropDown = function() {
-        $rootScope.$broadcast("expandApplicationDropDown", {expanded: false});
-    };
-
-    $scope.setApplicationView = function(viewId) {
-        $rootScope.$broadcast("setApplicationView", {viewId: viewId});
     }
 });
