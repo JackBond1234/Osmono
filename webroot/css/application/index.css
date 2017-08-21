@@ -1,4 +1,5 @@
 #application-container {
+    background-color: #0088FF;
     background-color: var(--primary-color, #000033);
     min-height: 100vh;
 }
@@ -38,6 +39,7 @@
 }
 
 #application-container .nav-bar-dropdown{
+    background-color: #0088FF;
     background-color: var(--primary-color, #000033);
     color: #FFFFFF;
 }

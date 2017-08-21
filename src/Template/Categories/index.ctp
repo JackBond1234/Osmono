@@ -39,15 +39,21 @@ echo $this->Html->script("Categories/Controller", ["block" => "script"]);
         <div id="body-content">
             <div class="loading"><?= $this->Html->image('spinner.svg', ['ng-if' => '!categoriesLoaded']); ?></div>
             <div class='categories-tag'
-                 ng-repeat="category in categories"
-                 ng-style="{'background' : '-webkit-linear-gradient(left, '+category.color+' 42px, white 42px)'}">
-            <table class="category-tag-data">
-                <tr>
-                    <td class="category-grip-container"><img ng-src="<?= $this->Url->build('/img/grip.svg'); ?>" class="category-grip"/></td>
-                    <td class="category-name"><div class="category-name-container" ng-bind="'&nbsp;'+category.name"></div></td>
-                    <td class="category-balance" ng-bind="category.balance|currency"></td>
-                </tr>
-            </table>
+                 ng-repeat="(categoryIndex, category) in categories"
+                 ng-style="{'background': '-webkit-linear-gradient(left, '+category.color+' 42px, white 42px)'}"
+                 ng-mousedown="markCategoryAsClickHeld(categoryIndex, $event)"
+                 ng-mouseup="markCategoryAsClickReleased()"
+                 ng-mouseover="handleMoveCategoryRequest(categoryIndex, $event)"
+                 data-category-id="{{category.id}}">
+                <!-- TODO: Possibly extend ng-style to allow an array of values for one property, in order to support non-webkit browsers -->
+                <table class="category-tag-data">
+                    <tr>
+                        <td class="category-grip-container"><img ng-src="<?= $this->Url->build('/img/grip.svg'); ?>" class="category-grip"/></td>
+                        <td class="category-name"><div class="category-name-container" ng-bind="'&nbsp;'+category.name"></div></td>
+                        <td class="category-balance" ng-bind="'&nbsp;&nbsp;'+(category.balance|currency)"></td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
 </div>

@@ -4,7 +4,8 @@
 }
 
 #details-container {
-    background-color: var(--tertiary-color, #EFEFEF);
+    background-color:#DDEEEE;
+    background-color: var(--tertiary-color, #DDEEEE);
     min-height: 100vh;
     height: 100vh;
 }
@@ -60,6 +61,7 @@
 }
 
 #details-container .detail-outer-dup-wrapper {
+    height: 100%;
     height: var(--dynamic-height);
     position: relative;
     overflow:hidden;
@@ -77,6 +79,7 @@
 }
 
 #details-container .detail-outer-dup-wrapper.ng-enter.ng-enter-active {
+    height: 100%;
     height: var(--dynamic-height);
 }
 
