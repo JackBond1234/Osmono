@@ -8,6 +8,7 @@
         "angular.min",
         "angular-route.min",
         "angular-animate.min",
+        "angular-touch",
         "AngularApps",
         "Main/Controller"
     ], ["block" => "script"]);

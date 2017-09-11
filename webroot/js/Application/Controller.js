@@ -1,6 +1,7 @@
 $(document).ready(function() {
     //Avoids flicker on touch buttons by using the mobileTouched class as a replacement for the :active status
     //We can't double up with touchstart AND mousedown, because the event would fire twice and flicker anyway
+    //TODO: Consider moving these into Angular somehow to use the element.bind functionality
     $(document).on('touchstart', '#application-container .nav-bar-dropdown ul li', function() {
         $(this).addClass('mobileTouched');
     });

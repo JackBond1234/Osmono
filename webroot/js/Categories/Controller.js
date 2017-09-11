@@ -1,4 +1,9 @@
 angular.module('index').controller('categoriesController', function($scope, $rootScope){
+    //TODO: General clean up
+    //TODO: Move drag and drop to a directive and possibly rewrite stuff
+    //TODO: Setup JS routing system
+    //TODO: With new JS routing system, try to get nav bar to work on Applications
+    //TODO: Try to use JS routing system for Details windows
     //Init
     $scope.categoriesLoaded = false;
     setTimeout(function() {
@@ -46,32 +51,37 @@ angular.module('index').controller('categoriesController', function($scope, $roo
         }
 
         $scope.categoriesLoaded = true;
+        $scope.$apply();
     }, (Math.random()*3000)+1000);
 
     var mouseHeldCategoryIndex;
+    var categoryMovedWhileHeld = false;
     var mouseHeldCategoryTag;
     var swapAnimationInProgress = false;
     var queuedAnimation;
     $scope.markCategoryAsClickHeld = function(categoryIndex, $event) {
-        if (typeof mouseHeldCategoryIndex === "undefined") {
+        if (typeof mouseHeldCategoryIndex === "undefined" && ($event.which === 0 || $event.which === 1)) { //0 is touch, 1 is left click
             mouseHeldCategoryIndex = categoryIndex;
+            categoryMovedWhileHeld = false;
             mouseHeldCategoryTag = $($event.target).closest('.categories-tag')[0];
-            //TODO: Accomplish this through real CSS and not inline
-            $(mouseHeldCategoryTag).css("z-index", 100);
-            $(mouseHeldCategoryTag).css("box-shadow", "0 4px 4px #000000");
+            $(mouseHeldCategoryTag).addClass("category-dragging");
         }
     };
 
     $scope.markCategoryAsClickReleased = function() {
         if (typeof mouseHeldCategoryIndex !== "undefined") {
-            //TODO: Accomplish this through real CSS and not inline
-            $(mouseHeldCategoryTag).css("z-index", "");
-            $(mouseHeldCategoryTag).css("box-shadow", "");
+            $(mouseHeldCategoryTag).removeClass("category-dragging");
+            if (!categoryMovedWhileHeld) {
+                $rootScope.$broadcast("openDetail", {
+                    name: $scope.categories[mouseHeldCategoryIndex].name,
+                    color: $scope.categories[mouseHeldCategoryIndex].color,
+                    index: mouseHeldCategoryIndex
+                });
+            }
             mouseHeldCategoryIndex = undefined;
             mouseHeldCategoryTag = undefined;
         }
     };
-
 
     $scope.handleMoveCategoryRequest = function(targetCategoryIndex, $event) {
         if (typeof mouseHeldCategoryIndex !== "undefined" && $($event.target).closest('.categories-tag').length > 0) {
@@ -86,14 +96,20 @@ angular.module('index').controller('categoriesController', function($scope, $roo
 
     function animateMoveCategoryToIndex(indexToMove, targetIndex, elementToMove, targetElement, swapAnimationCompleteHandler) {
         if (typeof indexToMove === "number" && typeof targetIndex === "number" && indexToMove !== targetIndex) {
+            //TODO: This looks like a side effect I'd like to avoid. It's not really relevant to animating the categories
+            //TODO: however logically this seems like the best place for the flag to be flipped. Possibly a sign that a
+            //TODO: larger refactor is in order
+            categoryMovedWhileHeld = true;
             if (!swapAnimationInProgress) {
+
                 var verticalDistanceBetweenElements = $(targetElement).offset().top - $(elementToMove).offset().top;
                 var direction = verticalDistanceBetweenElements / Math.abs(verticalDistanceBetweenElements);
                 swapAnimationInProgress = true;
                 var animationPromiseArray = [];
                 var elementsToShiftOneLength = getElementsToShiftDown(direction, elementToMove, targetElement);
-                var animationSpeed = (elementsToShiftOneLength.length > 1 ? 150 : 150);
+                var animationSpeed = (elementsToShiftOneLength.length > 1 ? 100 : 100);
                 $.each(elementsToShiftOneLength, function() {
+                    //TODO: Don't rely on these tags always being 45 pixels apart
                     animationPromiseArray.push($(this).animate({
                         top: direction * -45
                     }, animationSpeed).promise());
@@ -168,6 +184,7 @@ angular.module('index').controller('categoriesController', function($scope, $roo
             var direction = indexDifference / Math.abs(indexDifference);
             while (Math.abs(indexDifference) > 0) {
                 $scope.categories[indexToMove] = $scope.categories.splice(indexToMove + direction, 1, $scope.categories[indexToMove])[0];
+                $rootScope.$broadcast("categorySwap", {indexToSwap: indexToMove, indexToBeSwapped: indexToMove+direction});
                 indexToMove += direction;
                 indexDifference = targetIndex - indexToMove;
             }
@@ -180,7 +197,7 @@ angular.module('index').controller('categoriesController', function($scope, $roo
      */
     // $scope.moveCategory = function(targetCategoryIndex, $event) {
         //DONE: Try changing Parents to Closest to prevent errors when dragging by clicking on white space
-        //TODO: Unclicking not on a tag causes perma-drag
+        //DONE: Unclicking not on a tag causes perma-drag
         //TODO: Make window scroll if dragging toward the bottom of the screen
         //DONE: Swapping more than one element's distance should move intermediate elements along
         //DONE: Make this easier to trigger outside of a directive, i.e. get elements by index, maybe with data tag
@@ -189,8 +206,9 @@ angular.module('index').controller('categoriesController', function($scope, $roo
         //DONE: Add shadow to the active element as it's mouse-downed
         //TODO: Add touch drag support on mobile
         //TODO: Prevent touch drag when clicking anything but the grip on mobile. Make sure touch scrolling works
-        //TODO: Make sure click can broadcast an event
-        //TODO: Make sure touch can broadcast the same event
+        //DONE: Make sure click can broadcast an event
+        //DONE: Make sure touch can broadcast the same event
+        //DONE: Make sure move broadcasts an event
         // if (typeof activeCategory === "undefined") return;
         // if (swapAnimationInProgress) {
         //     queuedAnimation = {targetCategoryIndex: targetCategoryIndex, $event: $event};

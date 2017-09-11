@@ -10,12 +10,16 @@ if (Configure::read('debug')) {
 ?>
 
 <div ng-controller="detailsController" id="details-container">
-    <div class="detail-outer-dup-wrapper" ng-repeat="i in bop" ng-class="'dup'+i">
+    <div class="detail-outer-dup-wrapper"
+         ng-repeat="detailWindow in detailWindows | orderBy:'index'"
+         ng-style="{'background-color':detailWindow.color}"
+         pass-through-data="associateRepeatIndexWithDom(detailWindow.index, element)"
+    >
         <div class="menu-bar">
             <? // Implement a mobile interface switcher. Fix the CSS on this menu bar ?>
             <div class="left">Btn</div>
             <div class="right">Btn</div>
-            <div class="middle">Title{{i}}</div>
+            <div class="middle" ng-bind="detailWindow.name"></div>
         </div>
         <div class="body-container">
             <div ng-repeat="i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]">
