@@ -56,6 +56,7 @@ echo $this->Html->script("Categories/Controller", ["block" => "script"]);
                             <img ng-src="<?= $this->Url->build('/img/grip.svg'); ?>"
                                  class="category-grip"
                                  ng-touchstart="markCategoryAsClickHeld(categoryIndex, $event)"
+                                 draggable="false"
                             />
                         </td>
                         <td class="category-name"><div class="category-name-container" ng-bind="'&nbsp;'+category.name"></div></td>

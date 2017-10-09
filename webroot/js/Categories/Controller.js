@@ -40,7 +40,7 @@ angular.module('index').controller('categoriesController', function($scope, $roo
             }
         ];
 
-        var potentialcolors = ["#FF0000", "#FF9900", "#FFFF00", "#00FF00", "#0000FF"];
+        var potentialcolors = ["#FFFFFF", "#000000", "#FF0000", "#FF9900", "#FFFF00", "#00FF00", "#0000FF"];
         for(var i = 0; i < 40; i++) {
             $scope.categories.splice(Math.floor(Math.random() * $scope.categories.length), 0, {
                 id: i+5,
@@ -69,6 +69,10 @@ angular.module('index').controller('categoriesController', function($scope, $roo
     };
 
     $scope.markCategoryAsClickReleased = function() {
+        if (screenEdgeScrollInterval) {
+            clearInterval(screenEdgeScrollInterval);
+            screenEdgeScrollSpeed = 5;
+        }
         if (typeof mouseHeldCategoryIndex !== "undefined") {
             $(mouseHeldCategoryTag).removeClass("category-dragging");
             if (!categoryMovedWhileHeld) {
@@ -83,8 +87,13 @@ angular.module('index').controller('categoriesController', function($scope, $roo
         }
     };
 
+    var screenEdgeScrollInterval;
+    var screenEdgeScrollDirection;
+    var screenEdgeScrollSpeed = 5;
     $scope.handleMoveCategoryRequest = function(targetCategoryIndex, $event) {
         if (typeof mouseHeldCategoryIndex !== "undefined" && $($event.target).closest('.categories-tag').length > 0) {
+            handleScreenEdgeScrolling($event);
+
             var targetCategoryTag = $($event.target).closest('.categories-tag')[0];
             animateMoveCategoryToIndex(mouseHeldCategoryIndex, targetCategoryIndex, mouseHeldCategoryTag, targetCategoryTag, function() {
                 if (typeof mouseHeldCategoryIndex !== "undefined") {
@@ -93,6 +102,42 @@ angular.module('index').controller('categoriesController', function($scope, $roo
             });
         }
     };
+
+    function handleScreenEdgeScrolling($event) {
+        var yMouse = $event["clientY"] || window.yTouch;
+        if (screenEdgeScrollInterval) {
+            clearInterval(screenEdgeScrollInterval);
+            screenEdgeInterval(yMouse);
+        }
+        screenEdgeScrollInterval = setInterval(function() {
+            screenEdgeInterval(yMouse);
+        }, 40);
+    }
+
+    function screenEdgeInterval(yMouse) {
+        var bodyContent;
+        var distanceFromBottom = Math.abs(yMouse - $(window).height());
+        var distanceFromTop = yMouse-40;
+        if (distanceFromBottom < 50) {
+            if (screenEdgeScrollDirection !== "down") {
+                screenEdgeScrollSpeed = 5;
+                screenEdgeScrollDirection = "down";
+            }
+            bodyContent = $("#categories-container").find("#body-container").find("#body-content");
+            bodyContent.scrollTop(bodyContent.scrollTop() + screenEdgeScrollSpeed);
+            screenEdgeScrollSpeed = Math.min(screenEdgeScrollSpeed+0.5, 26-(distanceFromBottom/2));
+        } else if (distanceFromTop < 50) {
+            if (screenEdgeScrollDirection !== "up") {
+                screenEdgeScrollSpeed = 5;
+                screenEdgeScrollDirection = "up";
+            }
+            bodyContent = $("#categories-container").find("#body-container").find("#body-content");
+            bodyContent.scrollTop(bodyContent.scrollTop() - screenEdgeScrollSpeed);
+            screenEdgeScrollSpeed = Math.min(screenEdgeScrollSpeed+0.5, 26-(distanceFromTop/2));
+        } else {
+            screenEdgeScrollDirection = "none";
+        }
+    }
 
     function animateMoveCategoryToIndex(indexToMove, targetIndex, elementToMove, targetElement, swapAnimationCompleteHandler) {
         if (typeof indexToMove === "number" && typeof targetIndex === "number" && indexToMove !== targetIndex) {
@@ -205,7 +250,10 @@ angular.module('index').controller('categoriesController', function($scope, $roo
         //DONE: Make sure the active element always takes the top position over the shifting elements
         //DONE: Add shadow to the active element as it's mouse-downed
         //TODO: Add touch drag support on mobile
-        //TODO: Prevent touch drag when clicking anything but the grip on mobile. Make sure touch scrolling works
+        //DONE: Prevent touch drag when clicking anything but the grip on mobile. Make sure touch scrolling works
+        //TODO: Extend the grip to include the colored left part of the category tag on mobile
+        //DONE: Allow dragging the grip image on desktop
+        //TODO: Make clicking categories open details view on mobile
         //DONE: Make sure click can broadcast an event
         //DONE: Make sure touch can broadcast the same event
         //DONE: Make sure move broadcasts an event

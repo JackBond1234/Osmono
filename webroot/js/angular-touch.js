@@ -24,8 +24,13 @@ angular.module("ngTouch", [])
                 $element.bind("touchend", onTouchEnd);
             }
             function onTouchMove(event) {
-                var hoveredElement = document.elementFromPoint(event.originalEvent.touches[0].pageX, event.originalEvent.touches[0].pageY - $(window).scrollTop());
-                angular.element(hoveredElement).closest("[ng-mouseover]").trigger('mouseover');
+                var pageX = event.originalEvent.touches[0].pageX;
+                var pageY = event.originalEvent.touches[0].pageY - $(window).scrollTop();
+                var hoveredElement = document.elementFromPoint(pageX, pageY);
+                var triggerElement = angular.element(hoveredElement).closest("[ng-mouseover]");
+                window.xTouch = pageX;
+                window.yTouch = pageY;
+                triggerElement.trigger('mouseover');
             }
             function onTouchEnd(event) {
                 event.preventDefault();

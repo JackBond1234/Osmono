@@ -15,11 +15,28 @@ if (Configure::read('debug')) {
          ng-style="{'background-color':detailWindow.color}"
          pass-through-data="associateRepeatIndexWithDom(detailWindow.index, element)"
     >
-        <div class="menu-bar">
-            <? // Implement a mobile interface switcher. Fix the CSS on this menu bar ?>
-            <div class="left">Btn</div>
-            <div class="right">Btn</div>
+        <div id="menu-bar">
             <div class="middle" ng-bind="detailWindow.name"></div>
+            <div class="left">
+                <?= $this->Html->image(
+                    "hamburger_white.svg",
+                    [
+                        "class"=>"navBarButton",
+                        "ng-class"=>"{'depressed':applicationDropDownExpanded}",
+                        "ng-click"=>"toggleApplicationDropDown()",
+                        "click-anywhere-but-here"=>"retractApplicationDropDown()"
+                    ]
+                ); ?>
+            </div>
+            <div class="right">
+                <?= $this->Html->image(
+                    "x.svg",
+                    [
+                        "class"=>"navBarButton",
+                        "ng-click"=>"signalCloseDetail(detailWindow.index)"
+                    ]
+                ); ?>
+            </div>
         </div>
         <div class="body-container">
             <div ng-repeat="i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]">

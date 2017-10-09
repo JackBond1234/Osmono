@@ -66,6 +66,24 @@ body{
     background-color: #FFFFFF;
 }
 
+*::-webkit-scrollbar {
+    width: .4em;
+}
+*::-webkit-scrollbar,
+*::-webkit-scrollbar-thumb {
+    overflow:visible;
+    border-radius: 4px;
+}
+*::-webkit-scrollbar-thumb {
+    -webkit-transition: all .5s;
+    background: rgba(0,0,0,0);
+}
+
+*:hover::-webkit-scrollbar-thumb {
+    -webkit-transition: all .5s;
+    background: rgba(0,0,0,.2);
+}
+
 @media(min-width:600px) {
     /*Default State and Slide Out of Full Screen*/
     #ApplicationColumn {

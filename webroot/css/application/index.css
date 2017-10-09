@@ -16,8 +16,8 @@
 
 #application-container #menu-bar .middle {
     clear:both;
-    left:0;
-    right:0;
+    left: 40px;
+    right: 40px;
     text-align:center;
     position:absolute;
     font-size: x-large;
@@ -34,13 +34,14 @@
     overflow-y: scroll;
     position:absolute;
     left: 0;
+    right: 0;
     top: 0;
     bottom: 0;
 }
 
 #application-container .nav-bar-dropdown{
     background-color: #0088FF;
-    background-color: var(--primary-color, #000033);
+    background-color: var(--primary-color, #0088FF);
     color: #FFFFFF;
 }
 
@@ -118,10 +119,6 @@
         opacity: 0.5;
         transition: 0s
     }
-
-    #application-container #body-container #body-content {
-        right: -17px;
-    }
 }
 
 @media(max-width:599px){
@@ -146,9 +143,5 @@
         margin: 0;
         opacity: 0.5;
         transition: 0s
-    }
-
-    #application-container #body-container #body-content {
-        right: 0;
     }
 }

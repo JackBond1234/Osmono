@@ -1,4 +1,4 @@
-angular.module('index').controller('detailsController', function($scope){
+angular.module('index').controller('detailsController', function($scope, $rootScope){
     $scope.detailWindows = [];
     $scope.appName = "Data";
     var currentlyAnimating = false;
@@ -12,9 +12,19 @@ angular.module('index').controller('detailsController', function($scope){
         openDetailView(data["name"], data["color"], data["index"]);
     });
 
+    $scope.$on("closeDetail", function(event, data) {
+        closeDetailView(data["index"]);
+    });
+
     $scope.$on("categorySwap", function(event, data) {
         swapCategories(data["indexToSwap"], data["indexToBeSwapped"]);
     });
+
+    $scope.signalCloseDetail = function(index) {
+        $rootScope.$broadcast("closeDetail", {
+            index: index
+        });
+    };
 
     function swapCategories(indexToSwap, indexToBeSwapped) {
         if (currentlyAnimating) {
@@ -64,17 +74,29 @@ angular.module('index').controller('detailsController', function($scope){
         } else if ($scope.appName === "UserInfo") {
             $scope.appName = "Data";
         }
-        if ($scope.detailWindows.length < 4) {
+        if ($scope.detailWindows.length < 4 && findWithAttr($scope.detailWindows, "index", index) === -1) {
             $scope.detailWindows.push({
                 name: name,
                 color: color,
                 index: index
             });
-            var style = getComputedStyle(document.body);
-            var prevDynamicHeight = style.getPropertyValue('--dynamic-height');
-            document.documentElement.style.setProperty("--prev-dynamic-height", prevDynamicHeight, '');
-            document.documentElement.style.setProperty("--dynamic-height", (100 / $scope.detailWindows.length) + '%', '');
+            adjustDetailWindowHeights();
         }
+    }
+
+    function closeDetailView(index) {
+        var realIndex = findWithAttr($scope.detailWindows, "index", index);
+        if (realIndex > -1) {
+            $scope.detailWindows.splice(realIndex, 1);
+            adjustDetailWindowHeights();
+        }
+    }
+
+    function adjustDetailWindowHeights() {
+        var style = getComputedStyle(document.body);
+        var prevDynamicHeight = style.getPropertyValue('--dynamic-height');
+        document.documentElement.style.setProperty("--prev-dynamic-height", prevDynamicHeight, '');
+        document.documentElement.style.setProperty("--dynamic-height", (100 / $scope.detailWindows.length) + '%', '');
     }
 
     function animateSwapDetails(localIndexToSwap, localIndexToBeSwapped, categoryIndexToSwap, categoryIndexToBeSwapped) {
@@ -85,7 +107,7 @@ angular.module('index').controller('detailsController', function($scope){
         var verticalDistanceBetweenElements = elementToSwapY - elementToBeSwappedY;
         var animationPromiseArray = [];
         currentlyAnimating = true;
-
+        elementToSwap.addClass("detail-swap-primary");
         animationPromiseArray.push(elementToSwap.animate({
             top: -verticalDistanceBetweenElements
         }, 200).promise());
@@ -97,6 +119,7 @@ angular.module('index').controller('detailsController', function($scope){
         $.when.apply($, animationPromiseArray).done(function () {
             elementToSwap.css("top", "");
             elementToBeSwapped.css("top", "");
+            elementToSwap.removeClass("detail-swap-primary");
             $scope.detailWindows[localIndexToSwap].index = categoryIndexToBeSwapped;
             $scope.detailWindows[localIndexToBeSwapped].index = categoryIndexToSwap;
             $scope.$apply();
