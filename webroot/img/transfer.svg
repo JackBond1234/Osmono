@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20">
+    <rect style="fill:white" shape-rendering="crispEdges" width="15" height="3" x="0" y="5"/>
+    <rect style="fill:white" shape-rendering="crispEdges" width="15" height="3" x="5" y="12"/>
+    <polygon style="fill:white; stroke:none;" points="13,8 13,0 20,8"/>
+    <polygon style="fill:white; stroke:none;" points="7,12 7,20 0,12"/>
+</svg>

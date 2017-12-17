@@ -16,10 +16,40 @@ angular.module('index').controller('applicationController', function($scope, $ro
     $scope.applicationDropDownExpanded = false;
     $scope.applicationColumnExpanded = false;
     $scope.applicationViewToShow = 'data';
-    $scope.applicationDisplayNameMap = {
-        data: "Data",
-        distribute: "Distribute",
-        "user-info": "User Info"
+    $scope.applicationViews = {
+        "data": {
+            name: "Data",
+            url: $rootScope.buildPath({
+                prefix: 'application',
+                controller: 'data',
+                action: 'index'
+            }),
+            images: {
+                standard: 'data.svg'
+            }
+        },
+        "distribute": {
+            name: "Distribute",
+            url: $rootScope.buildPath({
+                prefix: 'application',
+                controller: 'distribute',
+                action: 'index'
+            }),
+            images: {
+                standard: 'distribute.svg'
+            }
+        },
+        "user-info": {
+            name: "User Info",
+            url: $rootScope.buildPath({
+                prefix: 'application',
+                controller: 'UserInfo',
+                action: 'index'
+            }),
+            images: {
+                standard: 'user-info.svg'
+            }
+        }
     };
 
     //Listeners
@@ -33,7 +63,6 @@ angular.module('index').controller('applicationController', function($scope, $ro
 
     var unsubscribeFromApplicationLoadListener;
     $scope.$on("setApplicationView", function(event, data){
-        // desiredViewToSwitchTo = data["viewId"];
         if (typeof unsubscribeFromApplicationLoadListener !== "function") {
             signalNewApplicationViewToLoad(data["viewId"]);
         }
@@ -110,7 +139,13 @@ angular.module('index').controller('applicationController', function($scope, $ro
 
         //(Re)activate content load listener so that queued events can fire when previous load is complete.
         unsubscribeFromApplicationLoadListener = $rootScope.$on("$includeContentLoaded", function () {
-            signalNewApplicationViewToLoad(desiredViewToSwitchTo);
+            //Timeout to let the digest complete, because angular needs to calculate the URL of the module
+            //Apply to make sure we're back in the digest (not sure if necessary, but less change is better)
+            setTimeout(function() {
+                $scope.$apply(function(){
+                    signalNewApplicationViewToLoad(desiredViewToSwitchTo);
+                });
+            },0);
         });
     }
 });

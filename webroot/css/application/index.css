@@ -87,6 +87,10 @@
     transition-timing-function: linear;
 }
 
+#application-container #body-container #body-content {
+    -webkit-overflow-scrolling: touch;
+}
+
 @media(min-width:600px) {
     #application-container #body-container {
         background-color: #FFFFFF;
@@ -121,7 +125,7 @@
     }
 }
 
-@media(max-width:599px){
+@media(max-width:599.999999999px){
     #application-container #body-container {
         background-color: #FFFFFF;
         color: #000000;
@@ -132,10 +136,6 @@
         top: 40px;
         border-radius: 0;
         overflow: hidden;
-    }
-
-    #application-container #body-container #body-content {
-        -webkit-overflow-scrolling: touch;
     }
 
     #application-container .nav-bar-dropdown ul li.mobileTouched:after {

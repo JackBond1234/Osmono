@@ -56,6 +56,10 @@
     transition-timing-function: linear;
 }
 
+#categories-container #body-container #body-content {
+    -webkit-overflow-scrolling: touch;
+}
+
 @media(min-width:600px) {
     #categories-container #body-container #body-content {
         /*box-shadow: inset 3px 0 3px -2px #888888;*/
@@ -94,7 +98,7 @@
     }
 }
 
-@media(max-width:599px){
+@media(max-width:599.999999999px){
     #categories-container #body-container {
         background-color: #F2F2F2;
         color: #000000;
@@ -105,10 +109,6 @@
         top: 40px;
         border-radius: 0;
         overflow: hidden;
-    }
-
-    #categories-container #body-container #body-content {
-        -webkit-overflow-scrolling: touch;
     }
 
     #categories-container .nav-bar-dropdown ul li.mobileTouched:after {
@@ -153,6 +153,11 @@
     box-shadow: 0 -1px 0 #e0e0e0, 0 0 2px rgba(0,0,0,.12), 0 2px 4px rgba(0,0,0,.24);
     margin: 2px;
     /*z-index:1;*/
+    /*transition: box-shadow 2000ms cubic-bezier(0.0, 0.0, 0.2, 1);*/
+}
+
+#categories-container .categories-tag.selected-category {
+    /* No styles for selected categories yet */
 }
 
 #categories-container .categories-tag.ng-enter.ng-enter-active  {
@@ -192,6 +197,7 @@
     /*box-shadow: 0 4px 4px #FF0000;*/
     z-index: 100;
     box-shadow: 0 -1px 4px #e0e0e0, 0 0 8px rgba(0,0,0,.12), 0 2px 16px rgba(0,0,0,.24);
+    /*transition: box-shadow 2000ms cubic-bezier(0.0, 0.0, 0.2, 1);*/
     /*box-shadow: 0 4px 4px #000000;*/
 
     /*z-index:2;*/
@@ -248,53 +254,3 @@
 #categories-container .category-grip-container{
     display:inline;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*#categories-container {*/
-    /*background-color: #000033;*/
-    /*min-height: 100vh;*/
-/*}*/
-
-/*#categories-container #menu-bar{*/
-    /*color: #FFFFFF;*/
-    /*padding:4px;*/
-/*}*/
-
-/*#categories-container #menu-bar .left {*/
-    /*float:left;*/
-/*}*/
-
-/*#categories-container #menu-bar .middle {*/
-    /*clear:both;*/
-    /*width: 100%;*/
-    /*text-align:center;*/
-/*}*/
-
-/*#categories-container #menu-bar .right {*/
-    /*float:right;*/
-/*}*/
-
-/*#categories-container #body-container {*/
-    /*background-color: #FFFFFF;*/
-    /*color: #000000;*/
-    /*position: absolute;*/
-    /*padding: 10px;*/
-    /*left: 4px;*/
-    /*right: 4px;*/
-    /*bottom: 4px;*/
-    /*top: 40px;*/
-    /*border-radius: 2px;*/
-    /*overflow-y: scroll;*/
-/*}*/

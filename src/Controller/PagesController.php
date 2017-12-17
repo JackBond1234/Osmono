@@ -40,6 +40,9 @@ class PagesController extends AppController
      */
     public function display(...$path)
     {
+        if (array_key_exists('cake_route', $_REQUEST)) {
+            return $this->redirect($_REQUEST['cake_route']);
+        }
         $count = count($path);
         if (!$count) {
             return $this->redirect('/');

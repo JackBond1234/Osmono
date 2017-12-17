@@ -11,91 +11,48 @@ if (Configure::read('debug')) {
 
 <div ng-controller="applicationController" id="application-container">
     <div id="menu-bar">
-        <div class="middle" ng-bind="applicationDisplayNameMap[applicationViewToShow]"></div>
+        <div class="middle" ng-bind="applicationViews[applicationViewToShow]['name']"></div>
         <div class="left">
-            <?= $this->Html->image(
-                    "hamburger_white.svg",
-                    [
-                        "class"=>"navBarButton",
-                        "ng-class"=>"{'depressed':applicationDropDownExpanded}",
-                        "ng-click"=>"toggleApplicationDropDown()",
-                        "click-anywhere-but-here"=>"retractApplicationDropDown()"
-                    ]
-            ); ?>
+            <img
+                ng-src="{{buildPath('img/hamburger_white.svg')}}"
+                class="navBarButton"
+                ng-class="{'depressed':applicationDropDownExpanded}"
+                ng-click="toggleApplicationDropDown()"
+                click-anywhere-but-here="retractApplicationDropDown()"
+            />
         </div>
         <div class="right">
-            <?= $this->Html->image(
-                    "x.svg",
-                    [
-                        "class"=>"navBarButton hideOnDesktop",
-                        "ng-click"=>"hideMobileApplication()"
-                    ]
-            ); ?>
-            <?= $this->Html->image(
-                    "expandLeftColumn.svg",
-                    [
-                        "class"=>"navBarButton ng-animate-disabled hideOnMobile",
-                        "ng-show"=>"!expandApplicationColumn",
-                        "ng-click"=>"expandDesktopApplication()"
-                    ]
-            ); ?>
-            <?= $this->Html->image(
-                    "retractLeftColumn.svg",
-                    [
-                        "class"=>"navBarButton ng-animate-disabled hideOnMobile",
-                        "ng-show"=>"expandApplicationColumn",
-                        "ng-click"=>"retractDesktopApplication()"
-                    ]
-            ); ?>
+            <img
+                ng-src="{{buildPath('img/x.svg')}}"
+                class="navBarButton hideOnDesktop"
+                ng-click="hideMobileApplication()"
+            />
+            <img
+                ng-src="{{buildPath('img/expandLeftColumn.svg')}}"
+                class="navBarButton ng-animate-disabled hideOnMobile"
+                ng-show="!expandApplicationColumn"
+                ng-click="expandDesktopApplication()"
+            />
+            <img
+                ng-src="{{buildPath('img/retractLeftColumn.svg')}}"
+                class="navBarButton ng-animate-disabled hideOnMobile"
+                ng-show="expandApplicationColumn"
+                ng-click="retractDesktopApplication()"
+            />
         </div>
     </div>
     <div id="body-container">
         <div id="body-content">
-            <div ng-if='applicationViewToShow == "data"' class='application-view' id="data-view">
-                <?= $this->element(
-                    "module",
-                    [
-                        "UrlBuilderArray" =>
-                        [
-                            'prefix' => 'application',
-                            'controller' => 'Data',
-                            'action' => 'index'
-                        ]
-                    ]
-                ); ?>
-            </div>
-            <div ng-if='applicationViewToShow == "distribute"' class='application-view' id="distribute-view">
-                <?= $this->element(
-                    "module",
-                    [
-                        "UrlBuilderArray" =>
-                            [
-                                'prefix' => 'application',
-                                'controller' => 'Distribute',
-                                'action' => 'index'
-                            ]
-                    ]
-                ); ?>
-            </div>
-            <div ng-if='applicationViewToShow == "user-info"' class='application-view' id="user-info-view">
-                <?= $this->element(
-                    "module",
-                    [
-                        "UrlBuilderArray" =>
-                            [
-                                'prefix' => 'application',
-                                'controller' => 'UserInfo',
-                                'action' => 'index'
-                            ]
-                    ]
-                ); ?>
+            <div class="application-view" ng-repeat="(applicationViewKey, applicationView) in applicationViews" ng-if="applicationViewToShow === applicationViewKey">
+                <?= $this->element('module', ['url' => "applicationView['url']"]); ?>
             </div>
         </div>
         <div class="nav-bar-dropdown" ng-class="{'expanded':applicationDropDownExpanded}">
             <ul>
-                <li ng-click="setApplicationView('data')"><?= $this->Html->image("data.svg"); ?><div ng-bind="applicationDisplayNameMap['data']"></div></li>
-                <li ng-click="setApplicationView('distribute')"><?= $this->Html->image("distribute.svg"); ?><div ng-bind="applicationDisplayNameMap['distribute']"></div></li>
-                <li ng-click="setApplicationView('user-info')"><?= $this->Html->image("userInfo.svg"); ?><div ng-bind="applicationDisplayNameMap['user-info']"></div></li>
+                <li ng-repeat="(applicationViewKey, applicationView) in applicationViews" ng-click="setApplicationView(applicationViewKey)">
+                    <img ng-src="{{buildPath('img/'+applicationView.images.standard)}}"/>
+                    <div ng-bind="applicationView['name']"></div>
+                </li>
             </ul>
         </div>
     </div>

@@ -1,10 +1,7 @@
 angular.module('index').controller('categoriesController', function($scope, $rootScope){
-    //TODO: General clean up
     //TODO: Move drag and drop to a directive and possibly rewrite stuff
-    //TODO: Setup JS routing system
-    //TODO: With new JS routing system, try to get nav bar to work on Applications
-    //TODO: Try to use JS routing system for Details windows
     //Init
+    $scope.categoriesWithOpenDetails = [];
     $scope.categoriesLoaded = false;
     setTimeout(function() {
         $scope.categories = [
@@ -40,19 +37,40 @@ angular.module('index').controller('categoriesController', function($scope, $roo
             }
         ];
 
+        function componentToHex(c) {
+            var hex = c.toString(16);
+            return hex.length == 1 ? "0" + hex : hex;
+        }
+
+        function rgbToHex(r, g, b) {
+            return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+        }
         var potentialcolors = ["#FFFFFF", "#000000", "#FF0000", "#FF9900", "#FFFF00", "#00FF00", "#0000FF"];
         for(var i = 0; i < 40; i++) {
             $scope.categories.splice(Math.floor(Math.random() * $scope.categories.length), 0, {
                 id: i+5,
                 name: "Additional Dummy Category",
                 balance: Math.round(Math.random() * 100000) / 100,
-                color: potentialcolors[Math.floor(Math.random() * potentialcolors.length)]
+                color: rgbToHex(Math.floor(Math.random()*256), Math.floor(Math.random()*256), Math.floor(Math.random()*256))
+                // color: potentialcolors[Math.floor(Math.random() * potentialcolors.length)]
             });
         }
 
         $scope.categoriesLoaded = true;
         $scope.$apply();
     }, (Math.random()*3000)+1000);
+
+    $scope.buildDynamicCategoryTagStyle = function(color) {
+        return {
+            'background': [
+                '-webkit-linear-gradient(left, ' + color + ' 42px, white 42px)',
+                '-moz-linear-gradient(left, ' + color + ' 42px, white 42px)',
+                '-ms-linear-gradient(left, ' + color + ' 42px, white 42px)',
+                '-o-linear-gradient(left, ' + color + ' 42px, white 42px)',
+                'linear-gradient(left, ' + color + ' 42px, white 42px)'
+            ]
+        }
+    };
 
     var mouseHeldCategoryIndex;
     var categoryMovedWhileHeld = false;
@@ -71,6 +89,7 @@ angular.module('index').controller('categoriesController', function($scope, $roo
     $scope.markCategoryAsClickReleased = function() {
         if (screenEdgeScrollInterval) {
             clearInterval(screenEdgeScrollInterval);
+            screenEdgeScrollInterval = undefined;
             screenEdgeScrollSpeed = 5;
         }
         if (typeof mouseHeldCategoryIndex !== "undefined") {
@@ -79,6 +98,7 @@ angular.module('index').controller('categoriesController', function($scope, $roo
                 $rootScope.$broadcast("openDetail", {
                     name: $scope.categories[mouseHeldCategoryIndex].name,
                     color: $scope.categories[mouseHeldCategoryIndex].color,
+                    id: $scope.categories[mouseHeldCategoryIndex].id,
                     index: mouseHeldCategoryIndex
                 });
             }
@@ -104,17 +124,14 @@ angular.module('index').controller('categoriesController', function($scope, $roo
     };
 
     function handleScreenEdgeScrolling($event) {
-        var yMouse = $event["clientY"] || window.yTouch;
-        if (screenEdgeScrollInterval) {
-            clearInterval(screenEdgeScrollInterval);
-            screenEdgeInterval(yMouse);
+        window.yTouch = $event["clientY"] || window.yTouch;
+        if (typeof screenEdgeScrollInterval === "undefined") {
+            screenEdgeScrollInterval = setInterval(screenEdgeInterval, 40);
         }
-        screenEdgeScrollInterval = setInterval(function() {
-            screenEdgeInterval(yMouse);
-        }, 40);
     }
 
-    function screenEdgeInterval(yMouse) {
+    function screenEdgeInterval() {
+        var yMouse = window.yTouch;
         var bodyContent;
         var distanceFromBottom = Math.abs(yMouse - $(window).height());
         var distanceFromTop = yMouse-40;
@@ -236,119 +253,16 @@ angular.module('index').controller('categoriesController', function($scope, $roo
         }
     }
 
-    /**
-     * @param {int} targetCategoryIndex
-     * @param {object} $event
-     */
-    // $scope.moveCategory = function(targetCategoryIndex, $event) {
-        //DONE: Try changing Parents to Closest to prevent errors when dragging by clicking on white space
-        //DONE: Unclicking not on a tag causes perma-drag
-        //TODO: Make window scroll if dragging toward the bottom of the screen
-        //DONE: Swapping more than one element's distance should move intermediate elements along
-        //DONE: Make this easier to trigger outside of a directive, i.e. get elements by index, maybe with data tag
-        //DONE: Starting drag by clicking border causes JS errors. Investigate parents() call above.
-        //DONE: Make sure the active element always takes the top position over the shifting elements
-        //DONE: Add shadow to the active element as it's mouse-downed
-        //TODO: Add touch drag support on mobile
-        //DONE: Prevent touch drag when clicking anything but the grip on mobile. Make sure touch scrolling works
-        //TODO: Extend the grip to include the colored left part of the category tag on mobile
-        //DONE: Allow dragging the grip image on desktop
-        //TODO: Make clicking categories open details view on mobile
-        //DONE: Make sure click can broadcast an event
-        //DONE: Make sure touch can broadcast the same event
-        //DONE: Make sure move broadcasts an event
-        // if (typeof activeCategory === "undefined") return;
-        // if (swapAnimationInProgress) {
-        //     queuedAnimation = {targetCategoryIndex: targetCategoryIndex, $event: $event};
-        //     return;
-        // }
-        // var activeElementWhenFunctionWasCalled = activeElement;
-        // var activeCategoryWhenFunctionWasCalled = activeCategory;
-        // var indexDistance = targetCategoryIndex - activeCategoryWhenFunctionWasCalled;
-        // if (indexDistance === 0 || activeCategory >= $scope.categories.length || activeCategory < 0 || activeCategory+indexDistance >= $scope.categories.length || activeCategory+indexDistance < 0) return;
-        // var direction = indexDistance/Math.abs(indexDistance);
-        // while (Math.abs(indexDistance) > 1) {
-        //     $scope.categories[activeCategoryWhenFunctionWasCalled] = $scope.categories.splice(activeCategoryWhenFunctionWasCalled+direction, 1, $scope.categories[activeCategoryWhenFunctionWasCalled])[0];
-        //     activeCategoryWhenFunctionWasCalled += direction;
-        //     activeCategory += direction;
-        //     indexDistance = targetCategoryIndex - activeCategoryWhenFunctionWasCalled;
-        // }
-        // setTimeout(function() {
-        //     var targetElement = $event.target;
-        //     var verticalDistanceBetweenElements = $(targetElement).offset().top - $(activeElementWhenFunctionWasCalled).offset().top;
-        //     swapAnimationInProgress = true;
-        //     $.when(
-        //         $(targetElement).animate({
-        //             top: -verticalDistanceBetweenElements
-        //         }, 150).promise(),
-        //         $(activeElementWhenFunctionWasCalled).animate({
-        //             top: verticalDistanceBetweenElements
-        //         }, 150).promise()
-        //     ).done(function() {
-        //         swapAnimationInProgress = false;
-        //         $(targetElement).css("top", "");
-        //         $(activeElementWhenFunctionWasCalled).css("top", "");
-        //         $scope.categories[activeCategoryWhenFunctionWasCalled] = $scope.categories.splice(activeCategoryWhenFunctionWasCalled+direction, 1, $scope.categories[activeCategoryWhenFunctionWasCalled])[0];
-        //         if (typeof activeCategory !== "undefined") {
-        //             activeCategory += direction;
-        //         }
-        //         $scope.$apply();
-        //         if (typeof queuedAnimation !== "undefined") {
-        //             var newTargetCategoryIndex = queuedAnimation.targetCategoryIndex;
-        //             var new$event = queuedAnimation.$event;
-        //             queuedAnimation = undefined;
-        //             if (Math.abs(targetCategoryIndex - activeCategoryWhenFunctionWasCalled) < Math.abs(newTargetCategoryIndex - activeCategoryWhenFunctionWasCalled)) {
-        //                 $scope.moveCategory(newTargetCategoryIndex, new$event);
-        //             }
-        //         }
-        //     });
-        // }, 0);
-    // };
-
-    // var potentialcolors = ["#FF0000", "#FF9900", "#FFFF00", "#00FF00", "#0000FF"];
-    // setInterval(function() {
-    //     // $scope.categories.splice(Math.floor(Math.random()*$scope.categories.length), 0, {
-    //     //     name: "Additional Dummy Category",
-    //     //     balance: Math.round(Math.random() * 100000)/100,
-    //     //     color: potentialcolors[Math.floor(Math.random()*potentialcolors.length)]
-    //     // });
-    //     $scope.categories = shuffle($scope.categories);
-    //     $scope.$apply();
-    // }, 5000);
-    //
-    // setInterval(function() {
-    //     if (Math.random() > 0.5) {
-    //         $scope.categories.splice(Math.floor(Math.random() * $scope.categories.length), 0, {
-    //             name: "Additional Dummy Category",
-    //             balance: Math.round(Math.random() * 100000) / 100,
-    //             color: potentialcolors[Math.floor(Math.random() * potentialcolors.length)]
-    //         });
-    //     } else {
-    //         $scope.categories.splice(Math.floor(Math.random() * $scope.categories.length), 1)
-    //     }
-    //     $scope.$apply();
-    // }, 2000);
-    //
-    // function shuffle(array) {
-    //     var currentIndex = array.length, temporaryValue, randomIndex;
-    //
-    //     // While there remain elements to shuffle...
-    //     while (0 !== currentIndex) {
-    //
-    //         // Pick a remaining element...
-    //         randomIndex = Math.floor(Math.random() * currentIndex);
-    //         currentIndex -= 1;
-    //
-    //         // And swap it with the current element.
-    //         temporaryValue = array[currentIndex];
-    //         array[currentIndex] = array[randomIndex];
-    //         array[randomIndex] = temporaryValue;
-    //     }
-    //
-    //     return array;
-    // }
-
     //Listeners
+    $scope.$on("openDetail", function(event, data) {
+        if ($scope.categoriesWithOpenDetails.length < 4) {
+            $scope.categoriesWithOpenDetails.push(data["id"]);
+        }
+    });
+
+    $scope.$on("closeDetail", function(event, data) {
+        $scope.categoriesWithOpenDetails.splice($scope.categoriesWithOpenDetails.indexOf(data["id"]), 1);
+    });
 
     //Emitters
     $scope.showApplication = function(){

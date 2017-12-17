@@ -11,44 +11,58 @@ if (Configure::read('debug')) {
 
 <div ng-controller="detailsController" id="details-container">
     <div class="detail-outer-dup-wrapper"
-         ng-repeat="detailWindow in detailWindows | orderBy:'index'"
+         ng-repeat="detailWindow in detailWindows | orderBy:'index' track by detailWindow.id"
          ng-style="{'background-color':detailWindow.color}"
          pass-through-data="associateRepeatIndexWithDom(detailWindow.index, element)"
     >
         <div id="menu-bar">
-            <div class="middle" ng-bind="detailWindow.name"></div>
+            <div class="middle" ng-style="{'color':detailWindow.textColor}" ng-bind="detailWindow.name"></div>
             <div class="left">
-                <?= $this->Html->image(
-                    "hamburger_white.svg",
-                    [
-                        "class"=>"navBarButton",
-                        "ng-class"=>"{'depressed':applicationDropDownExpanded}",
-                        "ng-click"=>"toggleApplicationDropDown()",
-                        "click-anywhere-but-here"=>"retractApplicationDropDown()"
-                    ]
-                ); ?>
+                <img
+                        ng-src="{{buildPath('img/hamburger_white.svg')}}"
+                        class="navBarButton"
+                        ng-class="{'depressed':detailWindow.detailDropDownExpanded}"
+                        ng-click="toggleDetailDropDown(detailWindow)"
+                        click-anywhere-but-here="retractDetailDropDown(detailWindow)"
+                        ng-if="detailWindow.hasDarkBackground"
+                />
+                <img
+                        ng-src="{{buildPath('img/hamburger_black.svg')}}"
+                        class="navBarButton darkNavBarButton"
+                        ng-class="{'depressed':detailWindow.detailDropDownExpanded}"
+                        ng-click="toggleDetailDropDown(detailWindow)"
+                        click-anywhere-but-here="retractDetailDropDown(detailWindow)"
+                        ng-if="!detailWindow.hasDarkBackground"
+                />
             </div>
             <div class="right">
-                <?= $this->Html->image(
-                    "x.svg",
-                    [
-                        "class"=>"navBarButton",
-                        "ng-click"=>"signalCloseDetail(detailWindow.index)"
-                    ]
-                ); ?>
+                <img
+                        ng-src="{{buildPath('img/x.svg')}}"
+                        class="navBarButton"
+                        ng-click="signalCloseDetail(detailWindow.index)"
+                        ng-if="detailWindow.hasDarkBackground"
+                />
+                <img
+                        ng-src="{{buildPath('img/x_black.svg')}}"
+                        class="navBarButton"
+                        ng-click="signalCloseDetail(detailWindow.index)"
+                        ng-if="!detailWindow.hasDarkBackground"
+                />
             </div>
         </div>
         <div class="body-container">
-            <div ng-repeat="i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]">
-                Details View <br>
-                This is the details view<br>
-                This view will display one or more<br>
-                windows representing categories. <br>
-                Each window will contain a number <br>
-                of possible views that give information <br>
-                and provide commands and actions <br>
-                for the user to perform on <br>
-                the selected category.
+            <div id="body-content">
+                <div class="detail-menu-view" ng-repeat="(detailMenuViewKey, detailMenuView) in detailMenuViews" ng-if="detailWindow['detailMenuViewToShow'] === detailMenuViewKey">
+                    <?= $this->element('module', ['url' => "detailMenuView['url'] + '&categoryId='+detailWindow.id"]); ?>
+                </div>
+            </div>
+            <div class="nav-bar-dropdown" ng-style="{'background-color':detailWindow.color}" ng-class="{'expanded':detailWindow.detailDropDownExpanded}">
+                <ul>
+                    <li ng-repeat="(detailMenuViewKey, detailMenuView) in detailMenuViews" ng-click="setDetailMenuView(detailMenuViewKey, detailWindow)">
+                        <img ng-src="{{buildPath('img/'+(detailWindow.hasDarkBackground ? detailMenuView.images.standard : detailMenuView.images.dark))}}"/>
+                        <div ng-style="{'color': detailWindow.textColor}" ng-bind="detailMenuView['name']"></div>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
