@@ -17,37 +17,59 @@ angular.module('index').controller('applicationController', function($scope, $ro
     $scope.applicationColumnExpanded = false;
     $scope.applicationViewToShow = 'data';
     $scope.applicationViews = {
+        "calendar": {
+            name: "Calendar",
+            url: $rootScope.buildPath({
+                prefix: "application",
+                controller: "calendar",
+                action: "index"
+            }),
+            images: {
+                standard: "calendar.svg"
+            }
+        },
         "data": {
             name: "Data",
             url: $rootScope.buildPath({
-                prefix: 'application',
-                controller: 'data',
-                action: 'index'
+                prefix: "application",
+                controller: "data",
+                action: "index"
             }),
             images: {
-                standard: 'data.svg'
+                standard: "data.svg"
             }
         },
         "distribute": {
             name: "Distribute",
             url: $rootScope.buildPath({
-                prefix: 'application',
-                controller: 'distribute',
-                action: 'index'
+                prefix: "application",
+                controller: "distribute",
+                action: "index"
             }),
             images: {
-                standard: 'distribute.svg'
+                standard: "distribute.svg"
+            }
+        },
+        "preferences": {
+            name: "Preferences",
+            url: $rootScope.buildPath({
+                prefix: "application",
+                controller: "preferences",
+                action: "index"
+            }),
+            images: {
+                standard: "settings.svg"
             }
         },
         "user-info": {
             name: "User Info",
             url: $rootScope.buildPath({
-                prefix: 'application',
-                controller: 'UserInfo',
-                action: 'index'
+                prefix: "application",
+                controller: "UserInfo",
+                action: "index"
             }),
             images: {
-                standard: 'user-info.svg'
+                standard: "user-info.svg"
             }
         }
     };
