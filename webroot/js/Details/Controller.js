@@ -154,7 +154,7 @@ angular.module('index').controller('detailsController', function($scope, $rootSc
         }
         var hasDarkBackground = $scope.contrastColor(color);
 
-        if ($scope.detailWindows.length < 4 && findWithAttr($scope.detailWindows, "index", index) === -1) {
+        if ($scope.detailWindows.length < Math.max(1,Math.floor($(window).height()/200)) && findWithAttr($scope.detailWindows, "index", index) === -1) {
             $scope.detailWindows.push({
                 name: name,
                 color: color,
