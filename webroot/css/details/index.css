@@ -10,76 +10,10 @@
     height: 100vh;
 }
 
-#details-container #menu-bar{
-    color: #FFFFFF;
-    padding:4px;
-}
-
-#details-container #menu-bar .left {
-    float:left;
-    position:absolute;
-}
-
-#details-container #menu-bar .middle {
-    clear:both;
-    left: 40px;
-    right: 40px;
-    text-align:center;
-    position:absolute;
-    font-size: x-large;
-    padding-top: 3px;
-}
-
-#details-container #menu-bar .right {
-    float:right;
-    position:relative;
-}
-
 #details-container .nav-bar-dropdown{
     background-color: #0088FF;
     background-color: var(--primary-color, #0088FF);
     color: #FFFFFF;
-}
-
-#details-container .nav-bar-dropdown ul li {
-    cursor: pointer;
-    display:block;
-    position:relative;
-}
-
-#details-container .nav-bar-dropdown ul li:after {
-    content: "";
-    background-color: #FFFFFF;
-    display: block;
-    position: absolute;
-    padding:0;
-    margin:0;
-    left:0;
-    right:0;
-    top:0;
-    bottom:0;
-    opacity: 0;
-    transition: opacity 200ms;
-}
-
-#details-container .nav-bar-dropdown ul li div {
-    display:inline-block;
-    margin-left: 10px;
-    vertical-align: middle;
-}
-
-#details-container .nav-bar-dropdown ul li img {
-    vertical-align:middle;
-}
-
-#details-container .body-container .body-content {
-    padding: 10px;
-    overflow-y: scroll;
-    position:absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
 }
 
 #details-container .detail-outer-dup-wrapper {
@@ -130,6 +64,10 @@
 }
 
 #details-container .body-container #body-content {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    -ms-word-break: break-all;
+    word-break: break-word;
     padding: 10px;
     overflow-y: scroll;
     position:absolute;

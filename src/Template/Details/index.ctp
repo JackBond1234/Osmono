@@ -6,7 +6,7 @@ if (Configure::read('debug')) {
 }
     echo $this->Html->css("details/index", ["block" => "css"]);
 
-    echo $this->Html->script("Details/Controller", ["block" => "script"]);
+    echo $this->Html->script("Details/DetailsController", ["block" => "script"]);
 ?>
 
 <div ng-controller="detailsController" id="details-container">
@@ -15,7 +15,7 @@ if (Configure::read('debug')) {
          ng-style="{'background-color':detailWindow.color}"
          pass-through-data="associateRepeatIndexWithDom(detailWindow.index, element)"
     >
-        <div id="menu-bar">
+        <div class="menu-bar">
             <div class="middle" ng-style="{'color':detailWindow.textColor}" ng-bind="detailWindow.name"></div>
             <div class="left">
                 <img

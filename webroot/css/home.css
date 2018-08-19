@@ -3,7 +3,7 @@
     src: url("../font/Exo-Light.otf") format("opentype");
 }
 
-@media(max-width:699px) {
+@media(max-width:699.9999999999px) {
     h1 {
         font-size: 15vw;
     }
@@ -41,24 +41,11 @@
         top:0;
         max-height:100%;
         overflow-y:scroll;
-        /*margin-left: -440px;*/
 
         /* Fade in tooltip */
         opacity: 0;
         transition: opacity 500ms;
     }
-
-    /*!* Tooltip arrow *!*/
-    /*.tooltip .tooltiptext::after {*/
-        /*content: "";*/
-        /*position: absolute;*/
-        /*top: 100%;*/
-        /*left: 88%;*/
-        /*margin-left: -5px;*/
-        /*border-width: 5px;*/
-        /*border-style: solid;*/
-        /*border-color: #555 transparent transparent transparent;*/
-    /*}*/
 }
 
 @media(min-width:700px) {
@@ -129,7 +116,7 @@ h2 {
     text-align:center;
 }
 
-.n {
+.osmono-n {
     color: #009900;
 }
 

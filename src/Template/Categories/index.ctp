@@ -6,15 +6,16 @@ if (Configure::read('debug')) {
 }
 echo $this->Html->css("categories/index", ["block" => "css"]);
 
-echo $this->Html->script("Categories/Controller", ["block" => "script"]);
+echo $this->Html->script("Categories/CategoriesController", ["block" => "script"]);
 ?>
 
 <div ng-controller="categoriesController" id="categories-container">
-    <div id="menu-bar">
+    <div class="menu-bar">
         <div class="middle">
             <img
                 ng-src="{{buildPath('img/plus.svg')}}"
                 class="navBarButton"
+                ng-click="showPopupTest()"
             />
         </div>
         <div class="left">
@@ -34,7 +35,7 @@ echo $this->Html->script("Categories/Controller", ["block" => "script"]);
             <div class="loading"><?= $this->Html->image('spinner.svg', ['ng-if' => '!categoriesLoaded']); ?></div>
             <div class='categories-tag'
                  ng-repeat="(categoryIndex, category) in categories"
-                 ng-style-array="buildDynamicCategoryTagStyle(category.color)"
+                 ng-style-array="buildDynamicCategoryTagStyle(category.color, categoriesWithOpenDetails.indexOf(category.id) > -1)"
                  ng-class="{'selected-category': categoriesWithOpenDetails.indexOf(category.id) > -1}"
                  ng-mousedown="markCategoryAsClickHeld(categoryIndex, $event)"
                  ng-mouseup="markCategoryAsClickReleased()"
@@ -53,8 +54,12 @@ echo $this->Html->script("Categories/Controller", ["block" => "script"]);
                                  draggable="false"
                             />
                         </td>
-                        <td class="category-name"><div class="category-name-container" ng-bind="'&nbsp;'+category.name"></div></td>
-                        <td class="category-balance" ng-bind="'&nbsp;&nbsp;'+(category.balance|currency)"></td>
+                        <td class="category-name-container">
+                            <div class="category-name"
+                                 ng-bind="'&nbsp;'+category.name">
+                            </div>
+                        </td>
+                        <td class="category-balance" ng-bind="'&nbsp;'+(category.balance|currency)"></td>
                     </tr>
                 </table>
             </div>

@@ -144,6 +144,7 @@ angular.module('index').controller('detailsController', function($scope, $rootSc
         return -1;
     }
 
+    var fakeWindowOpening = false;
     function openDetailView(name, color, index, id) {
         if ($scope.appName === "Data") {
             $scope.appName = "Distribute";
@@ -170,14 +171,43 @@ angular.module('index').controller('detailsController', function($scope, $rootSc
             $rootScope.$broadcast("showMobileDetailColumn", {
                 showing: true
             });
+            $rootScope.$broadcast("openedDetailWindow", {
+                id: id
+            });
+        } else if (findWithAttr($scope.detailWindows, "index", index) === -1){
+            if (!fakeWindowOpening) {
+                fakeWindowOpening = true;
+                $scope.detailWindows.push({
+                    name: name,
+                    color: color,
+                    textColor: hasDarkBackground ? "#FFFFFF" : "#000000",
+                    hasDarkBackground: hasDarkBackground,
+                    id: id,
+                    index: index,
+                    detailDropDownExpanded: false,
+                    unsubscribeFromDetailMenuLoadListener: undefined
+                });
+                adjustDetailWindowHeights();
+                setTimeout(function () {
+                    $scope.$apply(function () {
+                        var deleteIndex = findWithAttr($scope.detailWindows, "id", id);
+                        $scope.detailWindows.splice(deleteIndex, 1);
+                        adjustDetailWindowHeights();
+                        setTimeout(function() {
+                            fakeWindowOpening = false;
+                        }, 100);
+                    });
+                }, 100);
+            }
         }
     }
 
     function closeDetailView(index) {
         var realIndex = findWithAttr($scope.detailWindows, "index", index);
         if (realIndex > -1) {
+            var categoryId = $scope.detailWindows[realIndex].id;
             if ($scope.detailWindows.length === 1) {
-                $($scope.detailWindows[findWithAttr($scope.detailWindows, "index", index)]["element"]).on("transitionend", function() {
+                $($scope.detailWindows[realIndex]["element"]).on("transitionend", function() {
                     setTimeout(function() {
                         $rootScope.$broadcast("showMobileDetailColumn", {
                             showing: false
@@ -189,6 +219,9 @@ angular.module('index').controller('detailsController', function($scope, $rootSc
             removeExistingViews(angular.element($scope.detailWindows[realIndex]["element"]).find(".module"));
             $scope.detailWindows.splice(realIndex, 1);
             adjustDetailWindowHeights();
+            $rootScope.$broadcast("closedDetailWindow", {
+                id: categoryId
+            });
         }
     }
 

@@ -1,4 +1,41 @@
-angular.module('index').controller('categoriesController', function($scope, $rootScope){
+angular.module('index').controller('categoriesController', function($scope, $rootScope, $mdDialog){
+    $scope.showPopupTest = function(ev) {
+        $rootScope.popup.show({
+            title: "Confirm Pending Changes",
+            content: "The following changes are about to be made:<br><ul><li>You will add $1000 to category Unallocated</li><li>An event will trigger, moving $250 from Unallocated to Yacht Savings</li><li>An event will trigger, moving $50 from Yacht Savings to Overflow</li><li>The 8/19/2018-9/1/2018 pay period will begin</li></ul>The following changes are about to be made:<br><ul><li>You will add $1000 to category Unallocated</li><li>An event will trigger, moving $250 from Unallocated to Yacht Savings</li><li>An event will trigger, moving $50 from Yacht Savings to Overflow</li><li>The 8/19/2018-9/1/2018 pay period will begin</li></ul>",
+            preset: $rootScope.popup.presets.CONFIRM,
+            styleOverride: {
+                "max-height": "400px"
+            }
+        });
+        // $mdDialog.show({
+        //     template: '\
+        //                         <md-dialog aria-label="List dialog">                                          \
+        //                             <md-dialog-content>                                                       \
+        //                                 <md-list>                                                             \
+        //                                     <md-list-item ng-repeat="item in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]">\
+        //                                         <span>Number {{item}}</span>                                  \
+        //                                     </md-list-item></md-list>                                         \
+        //                                 </md-dialog-content>                                                  \
+        //                             <md-dialog-actions>                                                       \
+        //                                 <md-button ng-click="closeDialog()" class="md-primary">               \
+        //                                     Close Dialog                                                      \
+        //                                 </md-button>                                                          \
+        //                             </md-dialog-actions>                                                      \
+        //                         </md-dialog>',
+        //     parent: angular.element(document.body),
+        //     targetEvent: ev,
+        //     clickOutsideToClose: true,
+        //     fullscreen: false
+        // })
+        //     .then(function(answer) {
+        //         console.log(answer);
+        //         $scope.status = 'You said the information was "' + answer + '".';
+        //     }, function() {
+        //         console.log('cancel');
+        //         $scope.status = 'You cancelled the dialog.';
+        //     });
+    };
     //TODO: Move drag and drop to a directive and possibly rewrite stuff
     //Init
     $scope.categoriesWithOpenDetails = [];
@@ -34,6 +71,18 @@ angular.module('index').controller('categoriesController', function($scope, $roo
                 name: "Dummy Category Savings",
                 balance: 12345678.90,
                 color: "#0000FF"
+            },
+            {
+                id: 5,
+                name: "Dummy Category Entertainment",
+                balance: 12345678.90,
+                color: "#000000"
+            },
+            {
+                id: 6,
+                name: "Dummy Category Car Maintenance",
+                balance: 12345678.90,
+                color: "#FFFFFF"
             }
         ];
 
@@ -48,7 +97,7 @@ angular.module('index').controller('categoriesController', function($scope, $roo
         var potentialcolors = ["#FFFFFF", "#000000", "#FF0000", "#FF9900", "#FFFF00", "#00FF00", "#0000FF"];
         for(var i = 0; i < 40; i++) {
             $scope.categories.splice(Math.floor(Math.random() * $scope.categories.length), 0, {
-                id: i+5,
+                id: i+7,
                 name: "Additional Dummy Category",
                 balance: Math.round(Math.random() * 100000) / 100,
                 color: rgbToHex(Math.floor(Math.random()*256), Math.floor(Math.random()*256), Math.floor(Math.random()*256))
@@ -60,8 +109,8 @@ angular.module('index').controller('categoriesController', function($scope, $roo
         $scope.$apply();
     }, (Math.random()*3000)+1000);
 
-    $scope.buildDynamicCategoryTagStyle = function(color) {
-        return {
+    $scope.buildDynamicCategoryTagStyle = function(color, isSelectedCategory) {
+        var style = {
             'background': [
                 '-webkit-linear-gradient(left, ' + color + ' 42px, white 42px)',
                 '-moz-linear-gradient(left, ' + color + ' 42px, white 42px)',
@@ -69,7 +118,36 @@ angular.module('index').controller('categoriesController', function($scope, $roo
                 '-o-linear-gradient(left, ' + color + ' 42px, white 42px)',
                 'linear-gradient(left, ' + color + ' 42px, white 42px)'
             ]
+        };
+
+        if (isSelectedCategory) {
+            var r = parseInt(color.slice(1, 3), 16);
+            var g = parseInt(color.slice(3, 5), 16);
+            var b = parseInt(color.slice(5, 7), 16);
+            var total = r+g+b;
+            if (total > 720) {
+                r = Math.floor(r - ((total-720)/3));
+                g = Math.floor(g - ((total-720)/3));
+                b = Math.floor(b - ((total-720)/3));
+            }
+            var opacity = Math.max(Math.floor((r+g+b)/3), 64)/255;
+            r = Math.floor((r*opacity) + (255*(1-opacity)));
+            g = Math.floor((g*opacity) + (255*(1-opacity)));
+            b = Math.floor((b*opacity) + (255*(1-opacity)));
+            var newColor = '#' + r.toString(16) + g.toString(16) + b.toString(16);
+
+            style = {
+                'background': [
+                    '-webkit-linear-gradient(left, ' + color + ' 42px, ' + newColor +' 42px, white 100%)',
+                    '-moz-linear-gradient(left, ' + color + ' 42px, ' + newColor + ' 42px, white 100%)',
+                    '-ms-linear-gradient(left, ' + color + ' 42px, ' + newColor + ' 42px, white 100%)',
+                    '-o-linear-gradient(left, ' + color + ' 42px, ' + newColor + ' 42px, white 100%)',
+                    'linear-gradient(left, ' + color + ' 42px, ' + newColor + ' 42px, white 100%)'
+                ]
+            };
         }
+
+        return style;
     };
 
     var mouseHeldCategoryIndex;
@@ -254,13 +332,11 @@ angular.module('index').controller('categoriesController', function($scope, $roo
     }
 
     //Listeners
-    $scope.$on("openDetail", function(event, data) {
-        if ($scope.categoriesWithOpenDetails.length < 4) {
-            $scope.categoriesWithOpenDetails.push(data["id"]);
-        }
+    $scope.$on("openedDetailWindow", function(event, data) {
+        $scope.categoriesWithOpenDetails.push(data["id"]);
     });
 
-    $scope.$on("closeDetail", function(event, data) {
+    $scope.$on("closedDetailWindow", function(event, data) {
         $scope.categoriesWithOpenDetails.splice($scope.categoriesWithOpenDetails.indexOf(data["id"]), 1);
     });
 

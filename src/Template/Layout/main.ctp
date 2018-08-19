@@ -10,6 +10,7 @@
 
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
+    <?= $this->element('angularBridge'); ?>
     <?= $this->fetch('script') ?>
 </head>
 <body>

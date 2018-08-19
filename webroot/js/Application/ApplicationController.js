@@ -15,7 +15,7 @@ angular.module('index').controller('applicationController', function($scope, $ro
     //Init
     $scope.applicationDropDownExpanded = false;
     $scope.applicationColumnExpanded = false;
-    $scope.applicationViewToShow = 'data';
+    $scope.applicationViewToShow = 'calendar';
     $scope.applicationViews = {
         "calendar": {
             name: "Calendar",

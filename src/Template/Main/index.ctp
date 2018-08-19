@@ -1,21 +1,23 @@
 <?
     $this->Html->meta('viewport', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0', ['block' => true]);
 
-    echo $this->element('angularBridge');
-
     echo $this->Html->css([
-            "main/index"
-        ], ["block" => "css"]);
+            'main/index',
+            'popup/index',
+            'angular_material.min'
+        ], ['block' => 'css']);
 
     echo $this->Html->script([
-        "jquery",
-        "angular.js",
-        "angular-route.min",
-        "angular-animate.min",
-        "angular-touch",
-        "AngularApps",
-        "Main/Controller"
-    ], ["block" => "script"]);
+        'jquery',
+        'angular.js',
+        'angular-route.min',
+        'angular-animate.min',
+        'angular-touch',
+        'angular_aria.min',
+        'angular_material.min',
+        'AngularApps',
+        'Main/MainController'
+    ], ['block' => 'script']);
 
 
     $ApplicationUrl = ['controller' => 'Application', 'action' => 'index'];
@@ -30,7 +32,7 @@
     <div id="CategoryColumn" class="MainColumn">
         <?= $this->element('module', ['url' => "buildPath({controller: 'categories', action: 'index'})"]); ?>
     </div>
-    <div id="ApplicationColumn" class="MainColumn" ng-class="{'slideInOutHorizontally':showApplicationColumn, 'expandToFullScreen':expandApplicationColumn}">
+    <div id="ApplicationColumn" class="MainColumn" ng-class="{'transitionExit': allowAnimatingMobileApplicationColumnExit, 'slideInOutHorizontally':showApplicationColumn, 'expandToFullScreen':expandApplicationColumn}">
         <?= $this->element('module', ['url' => "buildPath({controller: 'application', action: 'index'})"]); ?>
     </div>
 </div>

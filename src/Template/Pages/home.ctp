@@ -10,7 +10,7 @@ $this->Html->meta('viewport', 'width=device-width, initial-scale=1.0, maximum-sc
 ?>
 
 <body>
-    <h1>Osmo<span class="n">n</span>o</h1>
+    <?= $this->element('logo'); ?>
     <h2>This website is under construction</h2>
     <br><br>
     <div id="consider-donating">Consider donating to speed up development!&nbsp;

@@ -6,11 +6,11 @@ if (Configure::read('debug')) {
 }
     echo $this->Html->css("application/index", ["block" => "css"]);
 
-    echo $this->Html->script("Application/Controller", ["block" => "script"]);
+    echo $this->Html->script("Application/ApplicationController", ["block" => "script"]);
 ?>
 
 <div ng-controller="applicationController" id="application-container">
-    <div id="menu-bar">
+    <div class="menu-bar">
         <div class="middle" ng-bind="applicationViews[applicationViewToShow]['name']"></div>
         <div class="left">
             <img
